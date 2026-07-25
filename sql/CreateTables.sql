@@ -60,7 +60,7 @@ CREATE TABLE Goals (
     GoalID INT IDENTITY(1,1) PRIMARY KEY,
     USERID INT NOT NULL,
     GoalName VARCHAR(50) NOT NULL,
-    GoalType VARCHAR(50) NOT NULL,
+    GoalType VARCHAR(50) NOT NULL,  // chat recomended to remove it
     TargetAmount DECIMAL(10,2) NOT NULL,
     SavedAmount DECIMAL(10,2) NOT NULL,
     Deadline DATE NOT NULL,

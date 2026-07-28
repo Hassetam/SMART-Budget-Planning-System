@@ -13,7 +13,7 @@ CREATE TABLE Budgets (
     BudgetID INT IDENTITY(1,1) PRIMARY KEY,
     USERID INT NOT NULL,
     MonthlyBudget DECIMAL(10,2) NOT NULL,
-    /*StartDate and EndDate instead of Month and Year?*/
+    -- StartDate and EndDate instead of Month and Year?
     Month INT NOT NULL,
     YEAR INT NOT NULL,
 
@@ -29,7 +29,7 @@ CREATE TABLE Expenses (
     ExpenseID INT IDENTITY(1,1) PRIMARY KEY,
     USERID INT NOT NULL,
     Amount DECIMAL(10,2) NOT NULL,
-    /*Should we keep Cateory or create a separate table*/
+    -- Should we keep Cateory or create a separate table
     Category VARCHAR(50) NOT NULL,
     Date DATE NOT NULL,
     Description VARCHAR(100),

@@ -58,12 +58,15 @@ CREATE TABLE Income (
 );
 GO
 
+
+
 --GOALS TABLE5
 CREATE TABLE Goals (
     GoalID INT IDENTITY(1,1) PRIMARY KEY,
     USERID INT NOT NULL,
     GoalName VARCHAR(50) NOT NULL,
-    GoalType VARCHAR(50) NOT NULL, --remove
+    GoalType VARCHAR(50) NOT NULL,
+    OccasionType VARCHAR(50) NULL, --for the user to specifiy the type of the occasion 
     TargetAmount DECIMAL(10,2) NOT NULL,
     SavedAmount DECIMAL(10,2) NOT NULL,
     Deadline DATE NOT NULL,
@@ -76,3 +79,16 @@ CREATE TABLE Goals (
 );
 GO
 
+--To implement soft deletion
+CREATE TABLE DeletedGoals (
+    GoalID INT PRIMARY KEY,   -- NOT an IDENTITY column
+    USERID INT NOT NULL,
+    GoalName VARCHAR(50) NOT NULL,
+    GoalType VARCHAR(50) NOT NULL,
+    OccasionType VARCHAR(50) NULL,
+    TargetAmount DECIMAL(10,2) NOT NULL,
+    SavedAmount DECIMAL(10,2) NOT NULL,
+    Deadline DATE NOT NULL,
+    Completed BIT NOT NULL
+);
+GO

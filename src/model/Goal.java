@@ -22,10 +22,10 @@ public abstract class Goal implements Analyzable {
 
     // Constructor used when creating a new goal
     public Goal(int userId, String goalName, String goalType, double targetAmount,
-                double savedAmount, LocalDate deadline,
-                boolean completed) {
+            double savedAmount, LocalDate deadline,
+            boolean completed) {
         this.userId = userId; //needed
-        this.goalName = goalName; 
+        this.goalName = goalName;
         this.goalType = goalType; //added goalType
         this.targetAmount = targetAmount;
         this.savedAmount = savedAmount;
@@ -35,11 +35,11 @@ public abstract class Goal implements Analyzable {
 
     // Constructor used when retrieving a goal from the database
     public Goal(int goalId, int userId, String goalName,
-                String goalType, double targetAmount, double savedAmount,
-                LocalDate deadline, boolean completed) {
+            String goalType, double targetAmount, double savedAmount,
+            LocalDate deadline, boolean completed) {
 
         this.goalId = goalId;
-        this.userId = userId; 
+        this.userId = userId;
         this.goalName = goalName;
         this.goalType = goalType;
         this.targetAmount = targetAmount;
@@ -49,7 +49,6 @@ public abstract class Goal implements Analyzable {
     }
 
     // Getters 
-
     public int getGoalId() {
         return goalId;
     }
@@ -88,11 +87,12 @@ public abstract class Goal implements Analyzable {
     //added setter methods for goalId and userId
     public void setGoalId(int goalId) {
         this.goalId = goalId;
-    } 
+    }
 
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
     public void setGoalName(String goalName) {
         this.goalName = goalName;
     }
@@ -119,17 +119,33 @@ public abstract class Goal implements Analyzable {
     }
 
     //  Goal Methods 
-
     public void addSavings(double amount) {
         this.savedAmount += amount;
     }
 
     // Implemented differently by child classes
     @Override
-    public abstract String analyze();
-
-    @Override
     public String toString() {
-        return goalName + " (" + savedAmount + "/" + targetAmount + ")";
+
+        return """
+           Goal ID        : %d
+           User ID        : %d
+           Goal Name      : %s
+           Goal Type      : %s
+           Target Amount  : %.2f
+           Saved Amount   : %.2f
+           Deadline       : %s
+           Completed      : %s
+           """
+                .formatted(
+                        goalId,
+                        userId,
+                        goalName,
+                        goalType,
+                        targetAmount,
+                        savedAmount,
+                        deadline,
+                        completed ? "Yes" : "No"
+                );
     }
 }

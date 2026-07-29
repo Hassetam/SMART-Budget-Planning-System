@@ -18,7 +18,7 @@ public class GeneralGoal extends Goal {
                        LocalDate deadline,
                        boolean completed) {
 
-        super(userId, goalName, goalType, targetAmount, savedAmount, deadline, completed);
+        super(userId, goalName, goalType,targetAmount, savedAmount, deadline, completed);
     }
 
     // Constructor for retrieving from the database

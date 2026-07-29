@@ -32,6 +32,7 @@ VALUES
 --GOALS TEST VALUES
 INSERT INTO Goals
 VALUES
-(1, 'Buy acrylic paint', 'Long term', 3000.00, 1000.00, '2027-01-01','FALSE'),
-(2, 'Buy Boots', 'Short term', 8000.00, 2000.00, '2026-08-30', 'FALSE'),
-(3, 'Buy skin care products', 'short term', 4000.00, 2000.00, '2026-08-14', 'FALSE');
+(1, 'Buy acrylic paint', 'Occasion', 'NULL', 3000.00, 1000.00, '2027-01-01','FALSE'),
+(2, 'Buy Boots', 'Occasion', 'NULL', 8000.00, 2000.00, '2026-08-30', 'FALSE'),
+(3, 'Buy skin care products', 'Occasion', 'NULL', 4000.00, 2000.00, '2026-08-14', 'FALSE');
+

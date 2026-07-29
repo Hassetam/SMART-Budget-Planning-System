@@ -6,11 +6,11 @@ public class Expense {
 
     // Expense information
     private int expenseId;
-    //added userId
+    // added userId
     private int userId;
     private double amount;
     private String category;
-    private LocalDate expenseDate;
+    private LocalDate dateSpent;
     private String description;
 
     // Default Constructor
@@ -19,34 +19,34 @@ public class Expense {
     }
 
     // Constructor used when creating a new expense
-    public Expense(int userId,double amount, String category,
-                   LocalDate expenseDate, String description) {
-        this.userId = userId; //needed
+    public Expense(int userId, double amount, String category,
+            LocalDate expenseDate, String description) {
+        this.userId = userId; // needed
         this.amount = amount;
         this.category = category;
-        this.expenseDate = expenseDate;
+        this.dateSpent = expenseDate;
         this.description = description;
     }
 
     // Constructor used when retrieving an expense from the database
     public Expense(int expenseId, int userId, double amount, String category,
-                   LocalDate expenseDate, String description) {
+            LocalDate expenseDate, String description) {
 
-        this.expenseId = expenseId; 
-        this.userId = userId; //needed
+        this.expenseId = expenseId;
+        this.userId = userId; // needed
         this.amount = amount;
         this.category = category;
-        this.expenseDate = expenseDate;
+        this.dateSpent = expenseDate;
         this.description = description;
     }
 
-    //  Getters 
+    // Getters
 
     public int getExpenseId() {
         return expenseId;
     }
 
-    //added getter method for userId
+    // added getter method for userId
     public int getUserId() {
         return userId;
     }
@@ -59,16 +59,16 @@ public class Expense {
         return category;
     }
 
-    public LocalDate getExpenseDate() {
-        return expenseDate;
+    public LocalDate getDateSpent() {
+        return dateSpent;
     }
 
     public String getDescription() {
         return description;
     }
 
-    //  Setters 
-    //setter methods for expenseId and userId
+    // Setters
+    // setter methods for expenseId and userId
     public void setExpenseId(int expenseId) {
         this.expenseId = expenseId;
     }
@@ -85,18 +85,18 @@ public class Expense {
         this.category = category;
     }
 
-    public void setExpenseDate(LocalDate expenseDate) {
-        this.expenseDate = expenseDate;
+    public void setDateSpent(LocalDate dateSpent) {
+        this.dateSpent = dateSpent;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    // Display 
+    // Display
 
     @Override
     public String toString() {
-        return category + " | " + amount + " | " + expenseDate;
+        return category + " | " + amount + " | " + dateSpent;
     }
 }

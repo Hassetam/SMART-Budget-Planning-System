@@ -2,7 +2,8 @@ USE SmartBudgetPlannerDB;
 GO
 
 --USER TABLE1
-CREATE TABLE Users (
+CREATE TABLE Users
+(
     USERID INT IDENTITY(1,1) PRIMARY KEY,
     FullName VARCHAR(100) NOT NULL,
     Username VARCHAR(50) NOT NULL UNIQUE,
@@ -12,7 +13,8 @@ CREATE TABLE Users (
 GO
 
 --BUDGETS TABLE2
-CREATE TABLE Budgets (
+CREATE TABLE Budgets
+(
     BudgetID INT IDENTITY(1,1) PRIMARY KEY,
     USERID INT NOT NULL,
     MonthlyBudget DECIMAL(10,2) NOT NULL,
@@ -28,13 +30,14 @@ GO
 
 
 --EXPENSES TABLE3
-CREATE TABLE Expenses (
+CREATE TABLE Expenses
+(
     ExpenseID INT IDENTITY(1,1) PRIMARY KEY,
     USERID INT NOT NULL,
     Amount DECIMAL(10,2) NOT NULL,
     -- Should we keep Cateory or create a separate table
     Category VARCHAR(50) NOT NULL,
-    Date DATE NOT NULL,
+    ExpenseDate DATE NOT NULL,
     Description VARCHAR(100),
 
     CONSTRAINT FK_Expenses_users
@@ -44,7 +47,8 @@ CREATE TABLE Expenses (
 GO
 
 --INCOME TABLE4
-CREATE TABLE Income (
+CREATE TABLE Income
+(
     IncomeID INT IDENTITY(1,1) PRIMARY KEY,
     USERID INT NOT NULL,
     Amount DECIMAL(10,2) NOT NULL,
@@ -61,7 +65,8 @@ GO
 
 
 --GOALS TABLE5
-CREATE TABLE Goals (
+CREATE TABLE Goals
+(
     GoalID INT IDENTITY(1,1) PRIMARY KEY,
     USERID INT NOT NULL,
     GoalName VARCHAR(50) NOT NULL,

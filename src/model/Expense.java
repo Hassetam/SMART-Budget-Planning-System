@@ -6,6 +6,8 @@ public class Expense {
 
     // Expense information
     private int expenseId;
+    //added userId
+    private int userId;
     private double amount;
     private String category;
     private LocalDate expenseDate;
@@ -17,9 +19,9 @@ public class Expense {
     }
 
     // Constructor used when creating a new expense
-    public Expense(double amount, String category,
+    public Expense(int userId,double amount, String category,
                    LocalDate expenseDate, String description) {
-
+        this.userId = userId; //needed
         this.amount = amount;
         this.category = category;
         this.expenseDate = expenseDate;
@@ -27,10 +29,11 @@ public class Expense {
     }
 
     // Constructor used when retrieving an expense from the database
-    public Expense(int expenseId, double amount, String category,
+    public Expense(int expenseId, int userId, double amount, String category,
                    LocalDate expenseDate, String description) {
 
-        this.expenseId = expenseId;
+        this.expenseId = expenseId; 
+        this.userId = userId; //needed
         this.amount = amount;
         this.category = category;
         this.expenseDate = expenseDate;
@@ -41,6 +44,11 @@ public class Expense {
 
     public int getExpenseId() {
         return expenseId;
+    }
+
+    //added getter method for userId
+    public int getUserId() {
+        return userId;
     }
 
     public double getAmount() {
@@ -60,6 +68,14 @@ public class Expense {
     }
 
     //  Setters 
+    //setter methods for expenseId and userId
+    public void setExpenseId(int expenseId) {
+        this.expenseId = expenseId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public void setAmount(double amount) {
         this.amount = amount;

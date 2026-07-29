@@ -1,13 +1,15 @@
 package model;
 
-import java.time.LocalDate;
 import interfaces.Analyzable;
+import java.time.LocalDate;
 
 public abstract class Goal implements Analyzable {
 
     // Goal information
     private int goalId;
+    private int userId; //added userId
     private String goalName;
+    private String goalType; //added goaltype
     private double targetAmount;
     private double savedAmount;
     private LocalDate deadline;
@@ -19,11 +21,12 @@ public abstract class Goal implements Analyzable {
     }
 
     // Constructor used when creating a new goal
-    public Goal(String goalName, double targetAmount,
+    public Goal(int userId, String goalName, String goalType, double targetAmount,
                 double savedAmount, LocalDate deadline,
                 boolean completed) {
-
-        this.goalName = goalName;
+        this.userId = userId; //needed
+        this.goalName = goalName; 
+        this.goalType = goalType; //added goalType
         this.targetAmount = targetAmount;
         this.savedAmount = savedAmount;
         this.deadline = deadline;
@@ -31,12 +34,14 @@ public abstract class Goal implements Analyzable {
     }
 
     // Constructor used when retrieving a goal from the database
-    public Goal(int goalId, String goalName,
-                double targetAmount, double savedAmount,
+    public Goal(int goalId, int userId, String goalName,
+                String goalType, double targetAmount, double savedAmount,
                 LocalDate deadline, boolean completed) {
 
         this.goalId = goalId;
+        this.userId = userId; 
         this.goalName = goalName;
+        this.goalType = goalType;
         this.targetAmount = targetAmount;
         this.savedAmount = savedAmount;
         this.deadline = deadline;
@@ -49,8 +54,18 @@ public abstract class Goal implements Analyzable {
         return goalId;
     }
 
+    //Added getter method for the userId
+    public int getUserId() {
+        return userId;
+    }
+
     public String getGoalName() {
         return goalName;
+    }
+
+    //added getter method for the goalType
+    public String getGoalType() {
+        return goalType;
     }
 
     public double getTargetAmount() {
@@ -69,10 +84,22 @@ public abstract class Goal implements Analyzable {
         return completed;
     }
 
-    //  Setters 
+    //  Setters
+    //added setter methods for goalId and userId
+    public void setGoalId(int goalId) {
+        this.goalId = goalId;
+    } 
 
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
     public void setGoalName(String goalName) {
         this.goalName = goalName;
+    }
+
+    //added setter method for goalType
+    public void setGoalType(String goalType) {
+        this.goalType = goalType;
     }
 
     public void setTargetAmount(double targetAmount) {

@@ -13,14 +13,16 @@ public class OccasionGoal extends Goal {
     }
 
     // Constructor for creating a new occasion goal
-    public OccasionGoal(String goalName,
+    public OccasionGoal(int userId, //added
+                        String goalName,
+                        String goalType, //Added goaltype, this constructor calls the Goal constructor
                         double targetAmount,
                         double savedAmount,
                         LocalDate deadline,
                         boolean completed,
                         String occasionType) {
 
-        super(goalName, targetAmount, savedAmount,
+        super(userId, goalName, goalType, targetAmount, savedAmount,
                 deadline, completed);
 
         this.occasionType = occasionType;
@@ -28,14 +30,16 @@ public class OccasionGoal extends Goal {
 
     // Constructor for retrieving from the database
     public OccasionGoal(int goalId,
+                        int userId, //added
                         String goalName,
+                        String goalType, //added
                         double targetAmount,
                         double savedAmount,
                         LocalDate deadline,
                         boolean completed,
                         String occasionType) {
 
-        super(goalId, goalName, targetAmount,
+        super(goalId, userId, goalName, goalType, targetAmount,
                 savedAmount, deadline, completed);
 
         this.occasionType = occasionType;

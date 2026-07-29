@@ -6,6 +6,7 @@ public class Income {
 
     // Income information
     private int incomeId;
+    private int userId;
     private double amount;
     private String incomeType;
     private LocalDate dateReceived;
@@ -17,9 +18,9 @@ public class Income {
     }
 
     // Constructor used when creating a new income
-    public Income(double amount, String incomeType,
+    public Income(int userId, double amount, String incomeType,
                   LocalDate dateReceived, String description) {
-
+        this.userId =userId; //needed
         this.amount = amount;
         this.incomeType = incomeType;
         this.dateReceived = dateReceived;
@@ -27,10 +28,11 @@ public class Income {
     }
 
     // Constructor used when retrieving income from the database
-    public Income(int incomeId, double amount, String incomeType,
+    public Income(int incomeId, int userId, double amount, String incomeType,
                   LocalDate dateReceived, String description) {
 
         this.incomeId = incomeId;
+        this.userId = userId; //needed
         this.amount = amount;
         this.incomeType = incomeType;
         this.dateReceived = dateReceived;
@@ -41,6 +43,11 @@ public class Income {
 
     public int getIncomeId() {
         return incomeId;
+    }
+
+    //added getter method for userId
+    public int getUserId() {
+        return userId;
     }
 
     public double getAmount() {
@@ -60,7 +67,15 @@ public class Income {
     }
 
     //  Setters 
+    //added setter methods for incomeId and userId
+    public void getIncomeId(int incomeId) {
+        this.incomeId = incomeId;
+    }
 
+    public void getUserId(int userId) {
+        this.userId = userId;
+    }
+    
     public void setAmount(double amount) {
         this.amount = amount;
     }

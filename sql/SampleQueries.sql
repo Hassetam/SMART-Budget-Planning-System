@@ -1,4 +1,7 @@
 -- ---------------------------------------------VIEW
+USE SmartBudgetPlannerDB;
+GO
+
 -- View all Users
 SELECT *
 FROM Users;
@@ -237,3 +240,6 @@ SELECT
     Round((SavedAmount / TargetAmount) * 100,2) AS GoalProgress
 FROM Goals
 WHERE UserID = 1;
+
+SELECT *
+FROM Users;

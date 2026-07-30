@@ -5,6 +5,9 @@ import service.FinanceService;
 import util.UIConstants;
 
 import javax.swing.*;
+
+import gui.MainFrame;
+
 import java.awt.*;
 
 public class DashboardPanel extends JPanel {
@@ -29,6 +32,8 @@ public class DashboardPanel extends JPanel {
     private JLabel remainingLabel;
     private JLabel savingsLabel;
 
+    private MainFrame mainFrame;
+
     // Recent Expenses
     private JTextArea recentExpenseArea;
 
@@ -36,9 +41,11 @@ public class DashboardPanel extends JPanel {
     private JButton addExpenseButton;
     private JButton addIncomeButton;
 
-    public DashboardPanel(User currentUser) {
+    public DashboardPanel(User currentUser,MainFrame mainFrame) {
 
         this.currentUser = currentUser;
+        this.mainFrame= mainFrame;
+
         financeService = new FinanceService();
 
         initializeComponents();
@@ -186,14 +193,11 @@ public class DashboardPanel extends JPanel {
 
     private void registerListeners() {
 
-        addExpenseButton.addActionListener(e ->
-                JOptionPane.showMessageDialog(this,
-                        "Open Expense Panel"));
-
-        addIncomeButton.addActionListener(e ->
-                JOptionPane.showMessageDialog(this,
-                        "Open Income Panel"));
-
+       addExpenseButton.addActionListener(e ->
+        mainFrame.showPanel("Expense"));
+    
+    addIncomeButton.addActionListener(e ->
+        mainFrame.showPanel("Income"));
     }
 
 }

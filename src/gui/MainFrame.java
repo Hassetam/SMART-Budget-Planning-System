@@ -1,16 +1,12 @@
 package gui;
 
-import java.awt.*;
-import javax.swing.*;
-
 import gui.panels.BudgetPanel;
 import gui.panels.DashboardPanel;
 import gui.panels.ExpensePanel;
 import gui.panels.GoalPanel;
-import gui.panels.IncomePanel;
-import gui.panels.ReportPanel;
-import gui.panels.SettingsPanel;
 import gui.panels.SmartAdvisorPanel;
+import java.awt.*;
+import javax.swing.*;
 import model.User;
 import util.UIConstants;
 
@@ -125,6 +121,11 @@ public class MainFrame extends JFrame {
         contentPanel.add(new ReportPanel(currentUser), "Report");
         contentPanel.add(new SmartAdvisorPanel(), "Advisor");
         contentPanel.add(new SettingsPanel(currentUser), "Settings");
+        //contentPanel.add(new IncomePanel(currentUser), "Income");
+        contentPanel.add(new GoalPanel(currentUser), "Goal");
+        //contentPanel.add(new ReportPanel(), "Report");
+        contentPanel.add(new SmartAdvisorPanel(currentUser), "Advisor");
+        //contentPanel.add(new SettingsPanel(), "Settings");
 
         // Show dashboard first
         cardLayout.show(contentPanel, "Dashboard");

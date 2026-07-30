@@ -122,9 +122,9 @@ public class MainFrame extends JFrame {
         contentPanel.add(new ExpensePanel(currentUser), "Expense");
         contentPanel.add(new IncomePanel(currentUser), "Income");
         contentPanel.add(new GoalPanel(), "Goal");
-        contentPanel.add(new ReportPanel(), "Report");
+        contentPanel.add(new ReportPanel(currentUser), "Report");
         contentPanel.add(new SmartAdvisorPanel(), "Advisor");
-        contentPanel.add(new SettingsPanel(), "Settings");
+        contentPanel.add(new SettingsPanel(currentUser), "Settings");
 
         // Show dashboard first
         cardLayout.show(contentPanel, "Dashboard");

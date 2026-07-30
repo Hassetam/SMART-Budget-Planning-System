@@ -1,11 +1,8 @@
 package gui;
 
-import model.User;
-
-import javax.swing.*;
 import java.awt.*;
-
-import gui.panels.*;
+import javax.swing.*;
+import model.User;
 import util.UIConstants;
 
 public class MainFrame extends JFrame {
@@ -118,7 +115,7 @@ public class MainFrame extends JFrame {
         contentPanel.add(new GoalPanel(), "Goal");
         contentPanel.add(new ReportPanel(), "Report");
         contentPanel.add(new SmartAdvisorPanel(), "Advisor");
-        contentPanel.add(new SettingsPanel(), "Settings");
+        contentPanel.add(new SettingsPanel(), "Settings");*/
 
         // Show dashboard first
         cardLayout.show(contentPanel, "Dashboard");

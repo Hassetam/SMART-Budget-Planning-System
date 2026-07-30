@@ -1,21 +1,17 @@
 package gui.panels;
 
-import model.User;
-import model.Goal;
-import model.GeneralGoal;
-import model.OccasionGoal;
-
-import service.GoalService;
-
-import util.UIConstants;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import model.GeneralGoal;
+import model.Goal;
+import model.OccasionGoal;
+import model.User;
+import service.GoalService;
+import util.UIConstants;
 
 public class GoalPanel extends JPanel {
 
@@ -47,6 +43,7 @@ public class GoalPanel extends JPanel {
     private JButton addSavingsButton;
     private JButton completeButton;
     private JButton deleteButton;
+    private JButton restoreButton;
 
     // ==========================================================
     // TABLE
@@ -195,7 +192,16 @@ public class GoalPanel extends JPanel {
                 .setFont(
                         UIConstants.BUTTON_FONT
                 );
+        
 
+        //Newly added(Restore Deleted) for restoring deleted goals
+        restoreButton = new JButton("Restore Deleted");
+
+        restoreButton.setFont(UIConstants.BUTTON_FONT);
+
+        restoreButton.setBackground(UIConstants.SUCCESS_COLOR);
+
+        restoreButton.setForeground(Color.WHITE);
     }
 
     // ==========================================================
@@ -365,6 +371,8 @@ public class GoalPanel extends JPanel {
                 BorderLayout.SOUTH
         );
 
+        //Newly added(For Restoring deleted goals)
+        buttonPanel.add(restoreButton);
     }
 
     // ==========================================================
@@ -459,6 +467,9 @@ public class GoalPanel extends JPanel {
                     }
 
                 });
+
+        //Newly added (For restoring deleted goals)
+        restoreButton.addActionListener(e -> handleRestore());
 
     }
 
@@ -798,6 +809,52 @@ public class GoalPanel extends JPanel {
 
         }
 
+    }
+
+    // ==========================================================
+    // RESTORE DELETED GOAL (calls restoreGoal(int goalId) once a name's picked.
+    // ==========================================================
+    private void handleRestore() {
+
+        List<Goal> deletedGoals = goalService.getDeletedGoalsByUser(currentUser.getUserId());
+
+        if (deletedGoals.isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "You have no deleted goals to restore."
+            );
+
+            return;
+        }
+
+        String[] goalNames = deletedGoals.stream()
+                .map(Goal::getGoalName)
+                .toArray(String[]::new);
+
+        String chosenName = (String) JOptionPane.showInputDialog(
+                this,
+                "Choose a goal to restore:",
+                "Restore Goal",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                goalNames,
+                goalNames[0]
+        );
+
+        if (chosenName == null) {
+            return;
+        }
+
+        for (Goal goal : deletedGoals) {
+
+            if (goal.getGoalName().equals(chosenName)) {
+
+                restoreGoal(goal.getGoalId()); //Triggers the reload automatically
+
+                return;
+            }
+        }
     }
 
     // ==========================================================

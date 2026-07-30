@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -365,7 +366,6 @@ public class GoalService {
         }
     }
 
-
     //=========================================================
     // STEP 7
     // Soft-delete: move the goal into DeletedGoals, then remove
@@ -463,9 +463,17 @@ public class GoalService {
         try {
             connection.setAutoCommit(false);
 
+            try (Statement identityOn = connection.createStatement()) {
+                identityOn.execute("SET IDENTITY_INSERT Goals ON");
+            }
+
             try (PreparedStatement moveBackStatement = connection.prepareStatement(moveBackSql)) {
                 moveBackStatement.setInt(1, goalId);
                 moveBackStatement.executeUpdate();
+            }
+
+            try (Statement identityOff = connection.createStatement()) {
+                identityOff.execute("SET IDENTITY_INSERT Goals OFF");
             }
 
             int rowsAffected;
@@ -499,4 +507,81 @@ public class GoalService {
         }
     }
 
+    //=========================================================
+    // Get all soft-deleted goals belonging to one user
+    //=========================================================
+    public List<Goal> getDeletedGoalsByUser(int userId) {
+
+        List<Goal> goals = new ArrayList<>();
+
+        String sql = """
+            SELECT *
+            FROM DeletedGoals
+            WHERE UserID = ?
+            ORDER BY GoalID
+            """;
+
+        try (
+                Connection connection = DatabaseManager.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, userId);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+
+                int goalId = resultSet.getInt("GoalID");
+                String goalName = resultSet.getString("GoalName");
+                String goalType = resultSet.getString("GoalType");
+                String occasionType = resultSet.getString("OccasionType");
+
+                double targetAmount = resultSet.getDouble("TargetAmount");
+                double savedAmount = resultSet.getDouble("SavedAmount");
+
+                Date deadline = resultSet.getDate("Deadline");
+
+                boolean completed = resultSet.getBoolean("Completed");
+
+                Goal goal;
+
+                if (goalType.equalsIgnoreCase("Occasion")) {
+
+                    goal = new OccasionGoal(
+                            goalId,
+                            userId,
+                            goalName,
+                            goalType,
+                            targetAmount,
+                            savedAmount,
+                            deadline.toLocalDate(),
+                            completed,
+                            occasionType
+                    );
+
+                } else {
+
+                    goal = new GeneralGoal(
+                            goalId,
+                            userId,
+                            goalName,
+                            goalType,
+                            targetAmount,
+                            savedAmount,
+                            deadline.toLocalDate(),
+                            completed
+                    );
+                }
+
+                goals.add(goal);
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println("Error retrieving deleted goals.");
+
+            e.printStackTrace();
+        }
+
+        return goals;
+    }
 }

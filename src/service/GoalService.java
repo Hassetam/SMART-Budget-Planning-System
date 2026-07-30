@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -365,7 +366,6 @@ public class GoalService {
         }
     }
 
-
     //=========================================================
     // STEP 7
     // Soft-delete: move the goal into DeletedGoals, then remove
@@ -463,9 +463,17 @@ public class GoalService {
         try {
             connection.setAutoCommit(false);
 
+            try (Statement identityOn = connection.createStatement()) {
+                identityOn.execute("SET IDENTITY_INSERT Goals ON");
+            }
+
             try (PreparedStatement moveBackStatement = connection.prepareStatement(moveBackSql)) {
                 moveBackStatement.setInt(1, goalId);
                 moveBackStatement.executeUpdate();
+            }
+
+            try (Statement identityOff = connection.createStatement()) {
+                identityOff.execute("SET IDENTITY_INSERT Goals OFF");
             }
 
             int rowsAffected;
@@ -498,8 +506,6 @@ public class GoalService {
             DatabaseManager.closeConnection(connection);
         }
     }
-
-
 
     //=========================================================
     // Get all soft-deleted goals belonging to one user

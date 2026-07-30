@@ -2,6 +2,15 @@ package gui;
 
 import java.awt.*;
 import javax.swing.*;
+
+import gui.panels.BudgetPanel;
+import gui.panels.DashboardPanel;
+import gui.panels.ExpensePanel;
+import gui.panels.GoalPanel;
+import gui.panels.IncomePanel;
+import gui.panels.ReportPanel;
+import gui.panels.SettingsPanel;
+import gui.panels.SmartAdvisorPanel;
 import model.User;
 import util.UIConstants;
 
@@ -111,11 +120,11 @@ public class MainFrame extends JFrame {
         contentPanel.add(new DashboardPanel(currentUser, this), "Dashboard");
         contentPanel.add(new BudgetPanel(currentUser), "Budget");
         contentPanel.add(new ExpensePanel(currentUser), "Expense");
-        contentPanel.add(new IncomePanel(), "Income");
+        contentPanel.add(new IncomePanel(currentUser), "Income");
         contentPanel.add(new GoalPanel(), "Goal");
         contentPanel.add(new ReportPanel(), "Report");
         contentPanel.add(new SmartAdvisorPanel(), "Advisor");
-        contentPanel.add(new SettingsPanel(), "Settings");*/
+        contentPanel.add(new SettingsPanel(), "Settings");
 
         // Show dashboard first
         cardLayout.show(contentPanel, "Dashboard");
@@ -155,7 +164,7 @@ public class MainFrame extends JFrame {
     }
 
     public void showPanel(String panelName) {
-    cardLayout.show(contentPanel, panelName);
-}
+        cardLayout.show(contentPanel, panelName);
+    }
 
 }

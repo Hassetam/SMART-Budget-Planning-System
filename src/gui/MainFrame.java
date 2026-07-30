@@ -111,9 +111,9 @@ public class MainFrame extends JFrame {
         }
 
         // Content Panel
-        contentPanel.add(new DashboardPanel(), "Dashboard");
-        contentPanel.add(new BudgetPanel(), "Budget");
-        contentPanel.add(new ExpensePanel(), "Expense");
+        contentPanel.add(new DashboardPanel(currentUser, this), "Dashboard");
+        contentPanel.add(new BudgetPanel(currentUser), "Budget");
+        contentPanel.add(new ExpensePanel(currentUser), "Expense");
         contentPanel.add(new IncomePanel(), "Income");
         contentPanel.add(new GoalPanel(), "Goal");
         contentPanel.add(new ReportPanel(), "Report");
@@ -156,5 +156,9 @@ public class MainFrame extends JFrame {
 
         });
     }
+
+    public void showPanel(String panelName) {
+    cardLayout.show(contentPanel, panelName);
+}
 
 }

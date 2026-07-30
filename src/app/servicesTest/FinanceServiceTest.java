@@ -1,11 +1,10 @@
 package app.servicesTest;
 
+import java.time.LocalDate;
 import model.Budget;
 import model.Expense;
 import model.Income;
 import service.FinanceService;
-
-import java.time.LocalDate;
 
 public class FinanceServiceTest {
 

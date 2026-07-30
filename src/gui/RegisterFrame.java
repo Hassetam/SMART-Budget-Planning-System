@@ -11,8 +11,8 @@ import java.awt.event.ActionListener;
 
 public class RegisterFrame extends JFrame {
 
-    //Components
-    
+    // Components
+
     private JPanel mainPanel;
     private JPanel formPanel;
 
@@ -50,7 +50,6 @@ public class RegisterFrame extends JFrame {
         setVisible(true);
     }
 
-    
     // Methods
 
     private void initializeComponents() {

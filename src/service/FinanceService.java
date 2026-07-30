@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class FinanceService {
@@ -425,6 +426,54 @@ public class FinanceService {
 
         return expenses;
     }
+
+    public boolean exceededDailyBudget(int userId) {
+
+        LocalDate today = LocalDate.now();
+
+        int month = today.getMonthValue();
+        int year = today.getYear();
+
+        Budget budget = getBudget(userId, month, year);
+
+        if (budget == null) {
+            return false;
+        }
+
+        double dailyBudget = budget.getMonthlyBudget() / today.lengthOfMonth();
+
+        double todayExpenses = getDailyExpenseTotal(userId, today);
+
+        return todayExpenses >= dailyBudget;
+    }
+
+    public double getDailyExpenseTotal(int userId, LocalDate date) {
+
+        String sql = """
+                SELECT ISNULL(SUM(Amount),0)
+                FROM Expenses
+                WHERE USERID = ?
+                AND DateSpent = ?
+                """;
+
+        try (Connection connection = DatabaseManager.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, userId);
+            statement.setDate(2, java.sql.Date.valueOf(date));
+
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
     // ==========================================================
     // INCOME METHODS
     // ==========================================================
@@ -746,6 +795,22 @@ public class FinanceService {
         double remaining = getRemainingBudget(userId, month, year);
 
         return (remaining / budget.getMonthlyBudget()) * 100;
+    }
+
+    /**
+     * Returns the daily budget for the selected month.
+     */
+    public double getDailyBudget(int userId, int month, int year) {
+
+        Budget budget = getBudget(userId, month, year);
+
+        if (budget == null) {
+            return 0;
+        }
+
+        int daysInMonth = LocalDate.of(year, month, 1).lengthOfMonth();
+
+        return budget.getMonthlyBudget() / daysInMonth;
     }
 
     /**

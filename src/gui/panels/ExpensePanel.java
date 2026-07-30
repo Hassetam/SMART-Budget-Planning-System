@@ -257,6 +257,17 @@ public class ExpensePanel extends JPanel {
 
                 clearFields();
 
+                if (financeService.exceededDailyBudget(currentUser.getUserId())) {
+
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Warning!\n\n"
+                                    + "You have already reached your daily budget.\n"
+                                    + "Please avoid spending for the rest of the day.",
+                            "Daily Budget Alert",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+
             }
 
             else {

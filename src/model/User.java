@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class User {
 
     // User information
-    private int userId;    // user id is initialized the database
+    private int userId; // user id is initialized the database
     private String fullName;
     private String username;
     private String password;
@@ -35,7 +35,7 @@ public class User {
 
     // Constructor used when retrieving a user from the database
     public User(int userId, String fullName, String username,
-                String password, LocalDate registrationDate) {
+            String password, LocalDate registrationDate) {
 
         this.userId = userId;
         this.fullName = fullName;
@@ -47,7 +47,8 @@ public class User {
     }
 
     // Initializes object references and collections
-    // private because we  want this method only in this class, we choose it instead of repeating this code.
+    // private because we want this method only in this class, we choose it instead
+    // of repeating this code.
     private void initializeCollections() {
         budget = new Budget();
         incomes = new ArrayList<>();
@@ -55,7 +56,7 @@ public class User {
         goals = new ArrayList<>();
     }
 
-    //  Getters - because our attributes are private.
+    // Getters - because our attributes are private.
 
     public int getUserId() {
         return userId;
@@ -93,7 +94,7 @@ public class User {
         return goals;
     }
 
-    //  Setters - also because we have private attributes
+    // Setters - also because we have private attributes
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
@@ -129,17 +130,16 @@ public class User {
         incomes.remove(income);
     }
 
-
     public void addGoal(Goal goal) {
         goals.add(goal);
-        
+
     }
 
     public void removeGoal(Goal goal) {
         goals.remove(goal);
     }
 
-    //  Display
+    // Display
 
     @Override
     public String toString() {

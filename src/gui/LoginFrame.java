@@ -33,7 +33,7 @@ public class LoginFrame extends JFrame {
 
     private AuthenticationService authenticationService;
 
-    //  Constructor // 
+    // Constructor //
 
     public LoginFrame() {
 
@@ -46,8 +46,7 @@ public class LoginFrame extends JFrame {
         setVisible(true);
     }
 
-    
-    // Methods // 
+    // Methods //
 
     private void initializeComponents() {
 

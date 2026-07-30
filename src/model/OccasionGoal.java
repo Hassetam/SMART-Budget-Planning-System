@@ -13,9 +13,9 @@ public class OccasionGoal extends Goal {
     }
 
     // Constructor for creating a new occasion goal
-    public OccasionGoal(int userId, //added
+    public OccasionGoal(int userId, // added
             String goalName,
-            String goalType, //Added goaltype, this constructor calls the Goal constructor
+            String goalType, // Added goaltype, this constructor calls the Goal constructor
             double targetAmount,
             double savedAmount,
             LocalDate deadline,
@@ -30,9 +30,9 @@ public class OccasionGoal extends Goal {
 
     // Constructor for retrieving from the database
     public OccasionGoal(int goalId,
-            int userId, //added
+            int userId, // added
             String goalName,
-            String goalType, //added
+            String goalType, // added
             double targetAmount,
             double savedAmount,
             LocalDate deadline,
@@ -56,8 +56,7 @@ public class OccasionGoal extends Goal {
     @Override
     public String analyze() {
 
-        long daysLeft
-                = ChronoUnit.DAYS.between(LocalDate.now(), getDeadline());
+        long daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), getDeadline());
 
         return "Occasion Goal: "
                 + occasionType

@@ -37,7 +37,7 @@ public class AuthenticationService {
                 """;
 
         try (Connection connection = DatabaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, user.getFullName());
             statement.setString(2, user.getUsername());
@@ -69,7 +69,7 @@ public class AuthenticationService {
                 """;
 
         try (Connection connection = DatabaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, username);
             statement.setString(2, password);
@@ -82,16 +82,14 @@ public class AuthenticationService {
                 String fullName = resultSet.getString("FullName");
                 String userName = resultSet.getString("Username");
                 String userPassword = resultSet.getString("Password");
-                LocalDate registrationDate =
-                        resultSet.getDate("RegistrationDate").toLocalDate();
+                LocalDate registrationDate = resultSet.getDate("RegistrationDate").toLocalDate();
 
                 return new User(
                         userId,
                         fullName,
                         userName,
                         userPassword,
-                        registrationDate
-                );
+                        registrationDate);
             }
 
         } catch (SQLException e) {
@@ -113,7 +111,7 @@ public class AuthenticationService {
                 """;
 
         try (Connection connection = DatabaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, username);
 
@@ -135,107 +133,101 @@ public class AuthenticationService {
         return password != null && password.length() >= 6;
     }
 
-   public boolean deleteAccount(int userId) {
+    public boolean deleteAccount(int userId) {
 
-    String deleteBudgets = """
-            DELETE FROM Budgets
-            WHERE USERID = ?
-            """;
+        String deleteBudgets = """
+                DELETE FROM Budgets
+                WHERE USERID = ?
+                """;
 
-    String deleteExpenses = """
-            DELETE FROM Expenses
-            WHERE USERID = ?
-            """;
+        String deleteExpenses = """
+                DELETE FROM Expenses
+                WHERE USERID = ?
+                """;
 
-    String deleteIncome = """
-            DELETE FROM Income
-            WHERE USERID = ?
-            """;
+        String deleteIncome = """
+                DELETE FROM Income
+                WHERE USERID = ?
+                """;
 
-    String deleteGoals = """
-            DELETE FROM Goals
-            WHERE USERID = ?
-            """;
+        String deleteGoals = """
+                DELETE FROM Goals
+                WHERE USERID = ?
+                """;
 
-    String deleteUser = """
-            DELETE FROM Users
-            WHERE USERID = ?
-            """;
+        String deleteUser = """
+                DELETE FROM Users
+                WHERE USERID = ?
+                """;
 
-    try (Connection connection = DatabaseManager.getConnection()) {
+        try (Connection connection = DatabaseManager.getConnection()) {
 
-        connection.setAutoCommit(false);
+            connection.setAutoCommit(false);
 
-        PreparedStatement statement;
+            PreparedStatement statement;
 
-        statement = connection.prepareStatement(deleteBudgets);
-        statement.setInt(1, userId);
-        statement.executeUpdate();
+            statement = connection.prepareStatement(deleteBudgets);
+            statement.setInt(1, userId);
+            statement.executeUpdate();
 
-        statement = connection.prepareStatement(deleteExpenses);
-        statement.setInt(1, userId);
-        statement.executeUpdate();
+            statement = connection.prepareStatement(deleteExpenses);
+            statement.setInt(1, userId);
+            statement.executeUpdate();
 
-        statement = connection.prepareStatement(deleteIncome);
-        statement.setInt(1, userId);
-        statement.executeUpdate();
+            statement = connection.prepareStatement(deleteIncome);
+            statement.setInt(1, userId);
+            statement.executeUpdate();
 
-        statement = connection.prepareStatement(deleteGoals);
-        statement.setInt(1, userId);
-        statement.executeUpdate();
+            statement = connection.prepareStatement(deleteGoals);
+            statement.setInt(1, userId);
+            statement.executeUpdate();
 
-        statement = connection.prepareStatement(deleteUser);
-        statement.setInt(1, userId);
+            statement = connection.prepareStatement(deleteUser);
+            statement.setInt(1, userId);
 
-        int rowsAffected = statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
 
-        connection.commit();
+            connection.commit();
 
-        return rowsAffected > 0;
+            return rowsAffected > 0;
 
-    } catch (SQLException e) {
+        } catch (SQLException e) {
 
-        e.printStackTrace();
+            e.printStackTrace();
 
-        return false;
-    }
-}
-
-public boolean changePassword(int userId, String newPassword) {
-
-    if (newPassword == null || newPassword.length() < 6) {
-
-        return false;
+            return false;
+        }
     }
 
+    public boolean changePassword(int userId, String newPassword) {
 
-    String sql = """
-            UPDATE Users
-            SET Password = ?
-            WHERE UserID = ?
-            """;
+        if (newPassword == null || newPassword.length() < 6) {
 
+            return false;
+        }
 
-    try (Connection connection = DatabaseManager.getConnection();
-         PreparedStatement statement = connection.prepareStatement(sql)) {
+        String sql = """
+                UPDATE Users
+                SET Password = ?
+                WHERE UserID = ?
+                """;
 
+        try (Connection connection = DatabaseManager.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
-        statement.setString(1, newPassword);
-        statement.setInt(2, userId);
+            statement.setString(1, newPassword);
+            statement.setInt(2, userId);
 
+            int rowsAffected = statement.executeUpdate();
 
-        int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0;
 
+        } catch (SQLException e) {
 
-        return rowsAffected > 0;
+            e.printStackTrace();
+            return false;
 
-
-    } catch (SQLException e) {
-
-        e.printStackTrace();
-        return false;
+        }
 
     }
-
-}
 }

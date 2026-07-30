@@ -46,365 +46,357 @@ public class IncomePanel extends JPanel {
     private JPanel buttonPanel;
     private JScrollPane tableScrollPane;
 
-public IncomePanel(User currentUser) {
+    public IncomePanel(User currentUser) {
 
-    this.currentUser = currentUser;
+        this.currentUser = currentUser;
 
-    financeService = new FinanceService();
+        financeService = new FinanceService();
 
-    initializeComponents();
-    layoutComponents();
-    loadIncome();
-    registerListeners();
-
-}
-
-private void initializeComponents() {
-
-    setLayout(new BorderLayout(15,15));
-    setBackground(UIConstants.BACKGROUND_COLOR);
-
-    titleLabel = new JLabel("Income Management");
-    titleLabel.setFont(UIConstants.TITLE_FONT);
-
-    amountLabel = new JLabel("Amount");
-    expectedLabel = new JLabel("Expected");
-    dateLabel = new JLabel("Date");
-    descriptionLabel = new JLabel("Description");
-
-    amountField = new JTextField(15);
-
-    expectedCheckBox = new JCheckBox("Expected Income");
-    expectedCheckBox.setBackground(UIConstants.BACKGROUND_COLOR);
-
-    dateField = new JTextField(LocalDate.now().toString());
-
-    descriptionField = new JTextField(20);
-
-    addButton = new JButton("Add");
-    updateButton = new JButton("Update");
-    deleteButton = new JButton("Delete");
-    clearButton = new JButton("Clear");
-
-    JButton[] buttons = {
-            addButton,
-            updateButton,
-            deleteButton,
-            clearButton
-    };
-
-    for (JButton button : buttons) {
-
-        button.setFont(UIConstants.BUTTON_FONT);
-        button.setBackground(UIConstants.BUTTON_COLOR);
-        button.setForeground(Color.WHITE);
+        initializeComponents();
+        layoutComponents();
+        loadIncome();
+        registerListeners();
 
     }
 
-    tableModel = new DefaultTableModel();
+    private void initializeComponents() {
 
-    tableModel.setColumnIdentifiers(new String[]{
-            "ID",
-            "Amount",
-            "Expected",
-            "Date",
-            "Description"
-    });
+        setLayout(new BorderLayout(15, 15));
+        setBackground(UIConstants.BACKGROUND_COLOR);
 
-    incomeTable = new JTable(tableModel);
+        titleLabel = new JLabel("Income Management");
+        titleLabel.setFont(UIConstants.TITLE_FONT);
 
-    incomeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        amountLabel = new JLabel("Amount");
+        expectedLabel = new JLabel("Expected");
+        dateLabel = new JLabel("Date");
+        descriptionLabel = new JLabel("Description");
 
-    tableScrollPane = new JScrollPane(incomeTable);
+        amountField = new JTextField(15);
 
-    formPanel = new JPanel(new GridBagLayout());
-    formPanel.setBackground(UIConstants.BACKGROUND_COLOR);
+        expectedCheckBox = new JCheckBox("Expected Income");
+        expectedCheckBox.setBackground(UIConstants.BACKGROUND_COLOR);
 
-    buttonPanel = new JPanel();
-    buttonPanel.setBackground(UIConstants.BACKGROUND_COLOR);
+        dateField = new JTextField(LocalDate.now().toString());
 
-}
+        descriptionField = new JTextField(20);
 
-private void layoutComponents() {
+        addButton = new JButton("Add");
+        updateButton = new JButton("Update");
+        deleteButton = new JButton("Delete");
+        clearButton = new JButton("Clear");
 
-    GridBagConstraints gbc = new GridBagConstraints();
+        JButton[] buttons = {
+                addButton,
+                updateButton,
+                deleteButton,
+                clearButton
+        };
 
-    gbc.insets = new Insets(10,10,10,10);
-    gbc.anchor = GridBagConstraints.WEST;
-    gbc.fill = GridBagConstraints.HORIZONTAL;
+        for (JButton button : buttons) {
 
-    gbc.gridx = 0;
-    gbc.gridy = 0;
-    gbc.gridwidth = 2;
-    formPanel.add(titleLabel, gbc);
+            button.setFont(UIConstants.BUTTON_FONT);
+            button.setBackground(UIConstants.BUTTON_COLOR);
+            button.setForeground(Color.WHITE);
 
-    gbc.gridwidth = 1;
+        }
 
-    gbc.gridx = 0;
-    gbc.gridy = 1;
-    formPanel.add(amountLabel, gbc);
+        tableModel = new DefaultTableModel();
 
-    gbc.gridx = 1;
-    formPanel.add(amountField, gbc);
+        tableModel.setColumnIdentifiers(new String[] {
+                "ID",
+                "Amount",
+                "Expected",
+                "Date",
+                "Description"
+        });
 
-    gbc.gridx = 0;
-    gbc.gridy = 2;
-    formPanel.add(expectedLabel, gbc);
+        incomeTable = new JTable(tableModel);
 
-    gbc.gridx = 1;
-    formPanel.add(expectedCheckBox, gbc);
+        incomeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-    gbc.gridx = 0;
-    gbc.gridy = 3;
-    formPanel.add(dateLabel, gbc);
+        tableScrollPane = new JScrollPane(incomeTable);
 
-    gbc.gridx = 1;
-    formPanel.add(dateField, gbc);
+        formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBackground(UIConstants.BACKGROUND_COLOR);
 
-    gbc.gridx = 0;
-    gbc.gridy = 4;
-    formPanel.add(descriptionLabel, gbc);
+        buttonPanel = new JPanel();
+        buttonPanel.setBackground(UIConstants.BACKGROUND_COLOR);
 
-    gbc.gridx = 1;
-    formPanel.add(descriptionField, gbc);
+    }
 
-    buttonPanel.add(addButton);
-    buttonPanel.add(updateButton);
-    buttonPanel.add(deleteButton);
-    buttonPanel.add(clearButton);
+    private void layoutComponents() {
 
-    add(formPanel, BorderLayout.NORTH);
-    add(tableScrollPane, BorderLayout.CENTER);
-    add(buttonPanel, BorderLayout.SOUTH);
+        GridBagConstraints gbc = new GridBagConstraints();
 
-}
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-private void loadIncome() {
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        formPanel.add(titleLabel, gbc);
 
-    tableModel.setRowCount(0);
+        gbc.gridwidth = 1;
 
-    for (Income income : financeService.getIncome(currentUser.getUserId())) {
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        formPanel.add(amountLabel, gbc);
 
-        tableModel.addRow(new Object[]{
+        gbc.gridx = 1;
+        formPanel.add(amountField, gbc);
 
-                income.getIncomeId(),
-                income.getAmount(),
-                income.isExpected(),
-                income.getDateReceived(),
-                income.getDescription()
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        formPanel.add(expectedLabel, gbc);
+
+        gbc.gridx = 1;
+        formPanel.add(expectedCheckBox, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        formPanel.add(dateLabel, gbc);
+
+        gbc.gridx = 1;
+        formPanel.add(dateField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        formPanel.add(descriptionLabel, gbc);
+
+        gbc.gridx = 1;
+        formPanel.add(descriptionField, gbc);
+
+        buttonPanel.add(addButton);
+        buttonPanel.add(updateButton);
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(clearButton);
+
+        add(formPanel, BorderLayout.NORTH);
+        add(tableScrollPane, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+    }
+
+    private void loadIncome() {
+
+        tableModel.setRowCount(0);
+
+        for (Income income : financeService.getIncome(currentUser.getUserId())) {
+
+            tableModel.addRow(new Object[] {
+
+                    income.getIncomeId(),
+                    income.getAmount(),
+                    income.isExpected(),
+                    income.getDateReceived(),
+                    income.getDescription()
+
+            });
+
+        }
+
+    }
+
+    private void registerListeners() {
+
+        addButton.addActionListener(e -> addIncome());
+
+        updateButton.addActionListener(e -> updateIncome());
+
+        deleteButton.addActionListener(e -> deleteIncome());
+
+        clearButton.addActionListener(e -> clearFields());
+
+        incomeTable.getSelectionModel().addListSelectionListener(e -> {
+
+            if (!e.getValueIsAdjusting()) {
+
+                fillFieldsFromTable();
+
+            }
 
         });
 
     }
 
-}
+    private void addIncome() {
 
-private void registerListeners() {
+        try {
 
-    addButton.addActionListener(e -> addIncome());
+            Income income = new Income(
 
-    updateButton.addActionListener(e -> updateIncome());
+                    currentUser.getUserId(),
 
-    deleteButton.addActionListener(e -> deleteIncome());
+                    Double.parseDouble(amountField.getText()),
 
-    clearButton.addActionListener(e -> clearFields());
+                    expectedCheckBox.isSelected(),
 
-    incomeTable.getSelectionModel().addListSelectionListener(e -> {
+                    LocalDate.parse(dateField.getText()),
 
-        if (!e.getValueIsAdjusting()) {
+                    descriptionField.getText()
 
-            fillFieldsFromTable();
+            );
 
-        }
+            if (financeService.addIncome(income)) {
 
-    });
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Income added successfully.");
 
-}
+                loadIncome();
 
-private void addIncome() {
+                clearFields();
 
-    try {
+            } else {
 
-        Income income = new Income(
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Failed to add income.");
 
-                currentUser.getUserId(),
+            }
 
-                Double.parseDouble(amountField.getText()),
-
-                expectedCheckBox.isSelected(),
-
-                LocalDate.parse(dateField.getText()),
-
-                descriptionField.getText()
-
-        );
-
-        if (financeService.addIncome(income)) {
+        } catch (Exception e) {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Income added successfully."
+                    "Invalid input.");
+
+        }
+
+    }
+
+    private void updateIncome() {
+
+        int row = incomeTable.getSelectedRow();
+
+        if (row == -1) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select an income record.");
+
+            return;
+        }
+
+        try {
+
+            Income income = new Income(
+
+                    (Integer) tableModel.getValueAt(row, 0),
+
+                    currentUser.getUserId(),
+
+                    Double.parseDouble(amountField.getText()),
+
+                    expectedCheckBox.isSelected(),
+
+                    LocalDate.parse(dateField.getText()),
+
+                    descriptionField.getText()
+
             );
+
+            if (financeService.updateIncome(income)) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Income updated successfully.");
+
+                loadIncome();
+
+                clearFields();
+
+            }
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Invalid input.");
+
+        }
+
+    }
+
+    private void deleteIncome() {
+
+        int row = incomeTable.getSelectedRow();
+
+        if (row == -1) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select an income record.");
+
+            return;
+        }
+
+        int incomeId = (Integer) tableModel.getValueAt(row, 0);
+
+        int option = JOptionPane.showConfirmDialog(
+
+                this,
+
+                "Delete selected income?",
+
+                "Confirm Delete",
+
+                JOptionPane.YES_NO_OPTION
+
+        );
+
+        if (option == JOptionPane.YES_OPTION) {
+
+            financeService.deleteIncome(incomeId);
 
             loadIncome();
 
             clearFields();
 
-        } else {
+        }
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Failed to add income."
-            );
+    }
+
+    private void fillFieldsFromTable() {
+
+        int row = incomeTable.getSelectedRow();
+
+        if (row == -1) {
+
+            return;
 
         }
 
-    } catch (Exception e) {
+        amountField.setText(
+                tableModel.getValueAt(row, 1).toString());
 
-        JOptionPane.showMessageDialog(
-                this,
-                "Invalid input."
-        );
+        expectedCheckBox.setSelected(
+                (Boolean) tableModel.getValueAt(row, 2));
 
-    }
+        dateField.setText(
+                tableModel.getValueAt(row, 3).toString());
 
-}
+        Object description = tableModel.getValueAt(row, 4);
 
-private void updateIncome() {
-
-    int row = incomeTable.getSelectedRow();
-
-    if (row == -1) {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Please select an income record."
-        );
-
-        return;
-    }
-
-    try {
-
-        Income income = new Income(
-
-                (Integer) tableModel.getValueAt(row, 0),
-
-                currentUser.getUserId(),
-
-                Double.parseDouble(amountField.getText()),
-
-                expectedCheckBox.isSelected(),
-
-                LocalDate.parse(dateField.getText()),
-
-                descriptionField.getText()
-
-        );
-
-        if (financeService.updateIncome(income)) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Income updated successfully."
-            );
-
-            loadIncome();
-
-            clearFields();
-
-        }
-
-    } catch (Exception e) {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Invalid input."
-        );
+        descriptionField.setText(
+                description == null ? "" : description.toString());
 
     }
 
-}
+    private void clearFields() {
 
-private void deleteIncome() {
+        amountField.setText("");
 
-    int row = incomeTable.getSelectedRow();
+        expectedCheckBox.setSelected(false);
 
-    if (row == -1) {
+        dateField.setText(LocalDate.now().toString());
 
-        JOptionPane.showMessageDialog(
-                this,
-                "Please select an income record."
-        );
+        descriptionField.setText("");
 
-        return;
-    }
-
-    int incomeId = (Integer) tableModel.getValueAt(row, 0);
-
-    int option = JOptionPane.showConfirmDialog(
-
-            this,
-
-            "Delete selected income?",
-
-            "Confirm Delete",
-
-            JOptionPane.YES_NO_OPTION
-
-    );
-
-    if (option == JOptionPane.YES_OPTION) {
-
-        financeService.deleteIncome(incomeId);
-
-        loadIncome();
-
-        clearFields();
+        incomeTable.clearSelection();
 
     }
-
-}
-
-private void fillFieldsFromTable() {
-
-    int row = incomeTable.getSelectedRow();
-
-    if (row == -1) {
-
-        return;
-
-    }
-
-    amountField.setText(
-            tableModel.getValueAt(row, 1).toString());
-
-    expectedCheckBox.setSelected(
-            (Boolean) tableModel.getValueAt(row, 2));
-
-    dateField.setText(
-            tableModel.getValueAt(row, 3).toString());
-
-    Object description = tableModel.getValueAt(row, 4);
-
-    descriptionField.setText(
-            description == null ? "" : description.toString());
-
-}
-
-private void clearFields() {
-
-    amountField.setText("");
-
-    expectedCheckBox.setSelected(false);
-
-    dateField.setText(LocalDate.now().toString());
-
-    descriptionField.setText("");
-
-    incomeTable.clearSelection();
-
-}
-
 
 }

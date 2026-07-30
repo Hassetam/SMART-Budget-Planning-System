@@ -4,7 +4,7 @@ public class Budget {
 
     // Budget information
     private int budgetId;
-    //added userId
+    // added userId
     private int userId;
     private double monthlyBudget;
     private int month;
@@ -17,7 +17,7 @@ public class Budget {
 
     // Constructor used when creating a new budget
     public Budget(int userId, double monthlyBudget, int month, int year) {
-        this.userId = userId; //need a userId when creating a new Budget
+        this.userId = userId; // need a userId when creating a new Budget
         this.monthlyBudget = monthlyBudget;
         this.month = month;
         this.year = year;
@@ -25,20 +25,20 @@ public class Budget {
 
     // Constructor used when retrieving a budget from the database
     public Budget(int budgetId, int userId, double monthlyBudget, int month, int year) {
-        this.budgetId = budgetId; 
-        this.userId = userId; //Added userId
+        this.budgetId = budgetId;
+        this.userId = userId; // Added userId
         this.monthlyBudget = monthlyBudget;
         this.month = month;
         this.year = year;
     }
 
-    // Getters 
+    // Getters
 
     public int getBudgetId() {
         return budgetId;
     }
 
-    //added getter method for userId
+    // added getter method for userId
     public int getUserId() {
         return userId;
     }
@@ -55,8 +55,8 @@ public class Budget {
         return year;
     }
 
-    //  Setters 
-    //added setter methods for budgetId and userId
+    // Setters
+    // added setter methods for budgetId and userId
     public void setBudgetId(int budgetId) {
         this.budgetId = budgetId;
     }
@@ -77,12 +77,12 @@ public class Budget {
         this.year = year;
     }
 
-    //  Display 
+    // Display
 
     @Override
     public String toString() {
         return "Budget: " + monthlyBudget +
-               " | Month: " + month +
-               " | Year: " + year;
+                " | Month: " + month +
+                " | Year: " + year;
     }
 }

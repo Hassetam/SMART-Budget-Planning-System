@@ -7,9 +7,9 @@ public abstract class Goal implements Analyzable {
 
     // Goal information
     private int goalId;
-    private int userId; //added userId
+    private int userId; // added userId
     private String goalName;
-    private String goalType; //added goaltype
+    private String goalType; // added goaltype
     private double targetAmount;
     private double savedAmount;
     private LocalDate deadline;
@@ -24,9 +24,9 @@ public abstract class Goal implements Analyzable {
     public Goal(int userId, String goalName, String goalType, double targetAmount,
             double savedAmount, LocalDate deadline,
             boolean completed) {
-        this.userId = userId; //needed
+        this.userId = userId; // needed
         this.goalName = goalName;
-        this.goalType = goalType; //added goalType
+        this.goalType = goalType; // added goalType
         this.targetAmount = targetAmount;
         this.savedAmount = savedAmount;
         this.deadline = deadline;
@@ -48,12 +48,12 @@ public abstract class Goal implements Analyzable {
         this.completed = completed;
     }
 
-    // Getters 
+    // Getters
     public int getGoalId() {
         return goalId;
     }
 
-    //Added getter method for the userId
+    // Added getter method for the userId
     public int getUserId() {
         return userId;
     }
@@ -62,7 +62,7 @@ public abstract class Goal implements Analyzable {
         return goalName;
     }
 
-    //added getter method for the goalType
+    // added getter method for the goalType
     public String getGoalType() {
         return goalType;
     }
@@ -83,8 +83,8 @@ public abstract class Goal implements Analyzable {
         return completed;
     }
 
-    //  Setters
-    //added setter methods for goalId and userId
+    // Setters
+    // added setter methods for goalId and userId
     public void setGoalId(int goalId) {
         this.goalId = goalId;
     }
@@ -97,7 +97,7 @@ public abstract class Goal implements Analyzable {
         this.goalName = goalName;
     }
 
-    //added setter method for goalType
+    // added setter method for goalType
     public void setGoalType(String goalType) {
         this.goalType = goalType;
     }
@@ -118,7 +118,7 @@ public abstract class Goal implements Analyzable {
         this.completed = completed;
     }
 
-    //  Goal Methods 
+    // Goal Methods
     public void addSavings(double amount) {
         this.savedAmount += amount;
     }
@@ -128,15 +128,15 @@ public abstract class Goal implements Analyzable {
     public String toString() {
 
         return """
-           Goal ID        : %d
-           User ID        : %d
-           Goal Name      : %s
-           Goal Type      : %s
-           Target Amount  : %.2f
-           Saved Amount   : %.2f
-           Deadline       : %s
-           Completed      : %s
-           """
+                Goal ID        : %d
+                User ID        : %d
+                Goal Name      : %s
+                Goal Type      : %s
+                Target Amount  : %.2f
+                Saved Amount   : %.2f
+                Deadline       : %s
+                Completed      : %s
+                """
                 .formatted(
                         goalId,
                         userId,
@@ -145,7 +145,6 @@ public abstract class Goal implements Analyzable {
                         targetAmount,
                         savedAmount,
                         deadline,
-                        completed ? "Yes" : "No"
-                );
+                        completed ? "Yes" : "No");
     }
 }

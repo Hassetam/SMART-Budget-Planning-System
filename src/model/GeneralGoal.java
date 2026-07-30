@@ -11,28 +11,28 @@ public class GeneralGoal extends Goal {
 
     // Constructor for creating a new goal
     public GeneralGoal(int userId,
-                       String goalName,
-                       String goalType,
-                       double targetAmount,
-                       double savedAmount,
-                       LocalDate deadline,
-                       boolean completed) {
+            String goalName,
+            String goalType,
+            double targetAmount,
+            double savedAmount,
+            LocalDate deadline,
+            boolean completed) {
 
-        super(userId, goalName, goalType,targetAmount, savedAmount, deadline, completed);
+        super(userId, goalName, goalType, targetAmount, savedAmount, deadline, completed);
     }
 
     // Constructor for retrieving from the database
     public GeneralGoal(int goalId,
-                       int userId,
-                       String goalName,
-                       String goalType,
-                       double targetAmount,
-                       double savedAmount,
-                       LocalDate deadline,
-                       boolean completed) {
+            int userId,
+            String goalName,
+            String goalType,
+            double targetAmount,
+            double savedAmount,
+            LocalDate deadline,
+            boolean completed) {
 
         super(goalId, userId, goalName, goalType, targetAmount,
-              savedAmount, deadline, completed);
+                savedAmount, deadline, completed);
     }
 
     @Override

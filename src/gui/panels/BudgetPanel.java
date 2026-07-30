@@ -40,364 +40,378 @@ public class BudgetPanel extends JPanel {
     private JPanel buttonPanel;
     private JPanel informationPanel;
 
-
     public BudgetPanel(User currentUser) {
 
-    this.currentUser = currentUser;
+        this.currentUser = currentUser;
 
-    financeService = new FinanceService();
+        financeService = new FinanceService();
 
-    initializeComponents();
-    layoutComponents();
-    loadCurrentBudget();
-    registerListeners();
-
-}
-private void initializeComponents() {
-
-    setLayout(new BorderLayout(20,20));
-    setBackground(UIConstants.BACKGROUND_COLOR);
-
-    titleLabel = new JLabel("Monthly Budget");
-    titleLabel.setFont(UIConstants.TITLE_FONT);
-
-    budgetLabel = new JLabel("Monthly Budget (ETB)");
-    monthLabel = new JLabel("Month");
-    yearLabel = new JLabel("Year");
-
-    currentBudgetLabel = new JLabel("No budget available.");
-
-    budgetLabel.setFont(UIConstants.NORMAL_FONT);
-    monthLabel.setFont(UIConstants.NORMAL_FONT);
-    yearLabel.setFont(UIConstants.NORMAL_FONT);
-    currentBudgetLabel.setFont(UIConstants.NORMAL_FONT);
-
-    budgetField = new JTextField(20);
-
-    String[] months = {
-            "January","February","March","April",
-            "May","June","July","August",
-            "September","October","November","December"
-    };
-
-    monthComboBox = new JComboBox<>(months);
-
-    yearComboBox = new JComboBox<>();
-
-    int currentYear = LocalDate.now().getYear();
-
-    for (int i = currentYear - 2; i <= currentYear + 5; i++) {
-
-        yearComboBox.addItem(i);
+        initializeComponents();
+        layoutComponents();
+        loadCurrentBudget();
+        registerListeners();
 
     }
 
-    saveButton = new JButton("Save Budget");
-    updateButton = new JButton("Update Budget");
-    clearButton = new JButton("Clear");
+    private void initializeComponents() {
 
-    saveButton.setFont(UIConstants.BUTTON_FONT);
-    updateButton.setFont(UIConstants.BUTTON_FONT);
-    clearButton.setFont(UIConstants.BUTTON_FONT);
+        setLayout(new BorderLayout(20, 20));
+        setBackground(UIConstants.BACKGROUND_COLOR);
 
-    saveButton.setBackground(UIConstants.BUTTON_COLOR);
-    updateButton.setBackground(UIConstants.BUTTON_COLOR);
-    clearButton.setBackground(UIConstants.BUTTON_COLOR);
+        titleLabel = new JLabel("Monthly Budget");
+        titleLabel.setFont(UIConstants.TITLE_FONT);
 
-    saveButton.setForeground(Color.WHITE);
-    updateButton.setForeground(Color.WHITE);
-    clearButton.setForeground(Color.WHITE);
+        budgetLabel = new JLabel("Monthly Budget (ETB)");
+        monthLabel = new JLabel("Month");
+        yearLabel = new JLabel("Year");
 
-    deleteButton = new JButton("Delete Budget");
+        currentBudgetLabel = new JLabel("No budget available.");
 
-deleteButton.setFont(UIConstants.BUTTON_FONT);
-deleteButton.setBackground(UIConstants.BUTTON_COLOR);
-deleteButton.setForeground(Color.WHITE);
+        budgetLabel.setFont(UIConstants.NORMAL_FONT);
+        monthLabel.setFont(UIConstants.NORMAL_FONT);
+        yearLabel.setFont(UIConstants.NORMAL_FONT);
+        currentBudgetLabel.setFont(UIConstants.NORMAL_FONT);
 
-    formPanel = new JPanel(new GridBagLayout());
-    formPanel.setBackground(UIConstants.BACKGROUND_COLOR);
+        budgetField = new JTextField(20);
 
-    buttonPanel = new JPanel();
-    buttonPanel.setBackground(UIConstants.BACKGROUND_COLOR);
+        String[] months = {
+                "January", "February", "March", "April",
+                "May", "June", "July", "August",
+                "September", "October", "November", "December"
+        };
 
-    informationPanel = new JPanel();
-    informationPanel.setBackground(UIConstants.BACKGROUND_COLOR);
+        monthComboBox = new JComboBox<>(months);
 
-}
+        yearComboBox = new JComboBox<>();
 
-private void layoutComponents() {
+        int currentYear = LocalDate.now().getYear();
 
-    GridBagConstraints gbc = new GridBagConstraints();
+        for (int i = currentYear - 2; i <= currentYear + 5; i++) {
 
-    gbc.insets = new Insets(10, 10, 10, 10);
-    gbc.anchor = GridBagConstraints.WEST;
-    gbc.fill = GridBagConstraints.HORIZONTAL;
+            yearComboBox.addItem(i);
 
-    // Title
-    gbc.gridx = 0;
-    gbc.gridy = 0;
-    gbc.gridwidth = 2;
-    formPanel.add(titleLabel, gbc);
+        }
 
-    gbc.gridwidth = 1;
+        saveButton = new JButton("Save Budget");
+        updateButton = new JButton("Update Budget");
+        clearButton = new JButton("Clear");
 
-    // Budget
-    gbc.gridx = 0;
-    gbc.gridy = 1;
-    formPanel.add(budgetLabel, gbc);
+        saveButton.setFont(UIConstants.BUTTON_FONT);
+        updateButton.setFont(UIConstants.BUTTON_FONT);
+        clearButton.setFont(UIConstants.BUTTON_FONT);
 
-    gbc.gridx = 1;
-    formPanel.add(budgetField, gbc);
+        saveButton.setBackground(UIConstants.BUTTON_COLOR);
+        updateButton.setBackground(UIConstants.BUTTON_COLOR);
+        clearButton.setBackground(UIConstants.BUTTON_COLOR);
 
-    // Month
-    gbc.gridx = 0;
-    gbc.gridy = 2;
-    formPanel.add(monthLabel, gbc);
+        saveButton.setForeground(Color.WHITE);
+        updateButton.setForeground(Color.WHITE);
+        clearButton.setForeground(Color.WHITE);
 
-    gbc.gridx = 1;
-    formPanel.add(monthComboBox, gbc);
+        deleteButton = new JButton("Delete Budget");
 
-    // Year
-    gbc.gridx = 0;
-    gbc.gridy = 3;
-    formPanel.add(yearLabel, gbc);
+        deleteButton.setFont(UIConstants.BUTTON_FONT);
+        deleteButton.setBackground(UIConstants.BUTTON_COLOR);
+        deleteButton.setForeground(Color.WHITE);
 
-    gbc.gridx = 1;
-    formPanel.add(yearComboBox, gbc);
+        formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBackground(UIConstants.BACKGROUND_COLOR);
 
-    // Buttons
-    buttonPanel.add(saveButton);
-    buttonPanel.add(updateButton);
-    buttonPanel.add(deleteButton);
-    buttonPanel.add(clearButton);
+        buttonPanel = new JPanel();
+        buttonPanel.setBackground(UIConstants.BACKGROUND_COLOR);
 
+        informationPanel = new JPanel();
+        informationPanel.setBackground(UIConstants.BACKGROUND_COLOR);
 
-    // Current Budget Panel
-    informationPanel.setLayout(new BorderLayout());
-
-    informationPanel.setBorder(
-            BorderFactory.createTitledBorder("Current Budget"));
-
-    informationPanel.add(currentBudgetLabel, BorderLayout.CENTER);
-
-    add(formPanel, BorderLayout.NORTH);
-    add(buttonPanel, BorderLayout.CENTER);
-    add(informationPanel, BorderLayout.SOUTH);
-
-}
-
-private void loadCurrentBudget() {
-
-    Budget budget = financeService.getCurrentBudget(currentUser.getUserId());
-
-    if (budget == null) {
-
-        currentBudgetLabel.setText("No budget found.");
-
-        return;
     }
 
-    budgetField.setText(String.valueOf(budget.getMonthlyBudget()));
+    private void layoutComponents() {
 
-    monthComboBox.setSelectedIndex(budget.getMonth() - 1);
+        GridBagConstraints gbc = new GridBagConstraints();
 
-    yearComboBox.setSelectedItem(budget.getYear());
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-   currentBudgetLabel.setText(
-        "<html>"
-        + "<b>Current Budget:</b> ETB "
-        + budget.getMonthlyBudget()
-        + "<br>"
-        + "<b>Month:</b> "
-        + monthComboBox.getSelectedItem()
-        + " "
-        + budget.getYear()
-        + "</html>"
-);
+        // Title
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        formPanel.add(titleLabel, gbc);
 
-}
+        gbc.gridwidth = 1;
 
-private void registerListeners() {
+        // Budget
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        formPanel.add(budgetLabel, gbc);
 
-    saveButton.addActionListener(e -> saveBudget());
+        gbc.gridx = 1;
+        formPanel.add(budgetField, gbc);
 
-    updateButton.addActionListener(e -> updateBudget());
+        // Month
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        formPanel.add(monthLabel, gbc);
 
-    clearButton.addActionListener(e -> clearFields());
+        gbc.gridx = 1;
+        formPanel.add(monthComboBox, gbc);
 
-    deleteButton.addActionListener(e -> deleteBudget());
+        // Year
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        formPanel.add(yearLabel, gbc);
 
-}
+        gbc.gridx = 1;
+        formPanel.add(yearComboBox, gbc);
 
+        // Buttons
+        buttonPanel.add(saveButton);
+        buttonPanel.add(updateButton);
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(clearButton);
 
-private void saveBudget() {
+        // Current Budget Panel
+        informationPanel.setLayout(new BorderLayout());
 
-    try {
+        informationPanel.setBorder(
+                BorderFactory.createTitledBorder("Current Budget"));
 
-        double amount = Double.parseDouble(budgetField.getText());
+        informationPanel.add(currentBudgetLabel, BorderLayout.CENTER);
 
-        int month = monthComboBox.getSelectedIndex() + 1;
+        add(formPanel, BorderLayout.NORTH);
+        add(buttonPanel, BorderLayout.CENTER);
+        add(informationPanel, BorderLayout.SOUTH);
 
-        int year = (Integer) yearComboBox.getSelectedItem();
+    }
 
-        if (financeService.budgetExists(currentUser.getUserId(), month, year)) {
+    private void loadCurrentBudget() {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "A budget already exists for this month.",
-                    "Duplicate Budget",
-                    JOptionPane.WARNING_MESSAGE
-            );
+        Budget budget = financeService.getCurrentBudget(currentUser.getUserId());
+
+        if (budget == null) {
+
+            currentBudgetLabel.setText("No budget found.");
 
             return;
         }
 
-        Budget budget = new Budget(
-                currentUser.getUserId(),
-                amount,
-                month,
-                year
-        );
+        budgetField.setText(String.valueOf(budget.getMonthlyBudget()));
 
-        if (financeService.createBudget(budget)) {
+        monthComboBox.setSelectedIndex(budget.getMonth() - 1);
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Budget saved successfully."
-            );
+        yearComboBox.setSelectedItem(budget.getYear());
 
-            loadCurrentBudget();
-
-        } else {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Failed to save budget."
-            );
-
-        }
-
-    } catch (NumberFormatException e) {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Please enter a valid budget amount."
-        );
+        currentBudgetLabel.setText(
+                "<html>"
+                        + "<b>Current Budget:</b> ETB "
+                        + budget.getMonthlyBudget()
+                        + "<br>"
+                        + "<b>Month:</b> "
+                        + monthComboBox.getSelectedItem()
+                        + " "
+                        + budget.getYear()
+                        + "</html>");
 
     }
 
-}
+    private void registerListeners() {
 
-private void updateBudget() {
+        saveButton.addActionListener(e -> saveBudget());
 
-    try {
+        updateButton.addActionListener(e -> updateBudget());
 
-        double amount = Double.parseDouble(budgetField.getText());
+        clearButton.addActionListener(e -> clearFields());
+
+        deleteButton.addActionListener(e -> deleteBudget());
+
+    }
+
+    private void saveBudget() {
+
+        try {
+
+            double amount = Double.parseDouble(budgetField.getText());
+
+            int month = monthComboBox.getSelectedIndex() + 1;
+
+            int year = (Integer) yearComboBox.getSelectedItem();
+
+            double monthlyIncome = financeService.getMonthlyIncomeTotal(
+                    currentUser.getUserId(),
+                    month,
+                    year);
+
+            if (monthlyIncome > 0 && amount > monthlyIncome) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Warning!\n\nYour monthly budget (ETB " + amount +
+                                ") is greater than your recorded income (ETB " + monthlyIncome +
+                                ").\n\nYou may spend more than you earn this month.",
+                        "Budget Warning",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+
+            if (financeService.budgetExists(currentUser.getUserId(), month, year)) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "A budget already exists for this month.",
+                        "Duplicate Budget",
+                        JOptionPane.WARNING_MESSAGE);
+
+                return;
+            }
+
+            Budget budget = new Budget(
+                    currentUser.getUserId(),
+                    amount,
+                    month,
+                    year);
+
+            if (financeService.createBudget(budget)) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Budget saved successfully.");
+
+                loadCurrentBudget();
+
+            } else {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Failed to save budget.");
+
+            }
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please enter a valid budget amount.");
+
+        }
+
+    }
+
+    private void updateBudget() {
+
+        try {
+
+            double amount = Double.parseDouble(budgetField.getText());
+
+            int month = monthComboBox.getSelectedIndex() + 1;
+
+            int year = (Integer) yearComboBox.getSelectedItem();
+
+            double monthlyIncome = financeService.getMonthlyIncomeTotal(
+                    currentUser.getUserId(),
+                    month,
+                    year);
+
+            if (monthlyIncome > 0 && amount > monthlyIncome) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Warning!\n\nYour monthly budget (ETB " + amount +
+                                ") is greater than your recorded income (ETB " + monthlyIncome +
+                                ").\n\nYou may spend more than you earn this month.",
+                        "Budget Warning",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+
+            Budget budget = new Budget(
+                    currentUser.getUserId(),
+                    amount,
+                    month,
+                    year);
+
+            if (financeService.updateBudget(budget)) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Budget updated successfully.");
+
+                loadCurrentBudget();
+
+            } else {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "No budget found to update.");
+
+            }
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please enter a valid budget amount.");
+
+        }
+
+    }
+
+    private void clearFields() {
+
+        budgetField.setText("");
+
+        monthComboBox.setSelectedIndex(LocalDate.now().getMonthValue() - 1);
+
+        yearComboBox.setSelectedItem(LocalDate.now().getYear());
+
+    }
+
+    private void deleteBudget() {
 
         int month = monthComboBox.getSelectedIndex() + 1;
 
         int year = (Integer) yearComboBox.getSelectedItem();
 
-        Budget budget = new Budget(
+        Budget budget = financeService.getBudget(
                 currentUser.getUserId(),
-                amount,
                 month,
-                year
-        );
+                year);
 
-        if (financeService.updateBudget(budget)) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Budget updated successfully."
-            );
-
-            loadCurrentBudget();
-
-        } else {
+        if (budget == null) {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "No budget found to update."
-            );
+                    "No budget found for the selected month.");
 
+            return;
         }
 
-    } catch (NumberFormatException e) {
-
-        JOptionPane.showMessageDialog(
+        int choice = JOptionPane.showConfirmDialog(
                 this,
-                "Please enter a valid budget amount."
-        );
+                "Delete this budget?",
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION);
 
-    }
+        if (choice == JOptionPane.YES_OPTION) {
 
-}
+            if (financeService.deleteBudget(budget.getBudgetId())) {
 
-private void clearFields() {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Budget deleted successfully.");
 
-    budgetField.setText("");
+                clearFields();
 
-    monthComboBox.setSelectedIndex(LocalDate.now().getMonthValue() - 1);
+                loadCurrentBudget();
 
-    yearComboBox.setSelectedItem(LocalDate.now().getYear());
+            } else {
 
-}
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Failed to delete budget.");
 
-private void deleteBudget() {
-
-    int month = monthComboBox.getSelectedIndex() + 1;
-
-    int year = (Integer) yearComboBox.getSelectedItem();
-
-    Budget budget = financeService.getBudget(
-            currentUser.getUserId(),
-            month,
-            year
-    );
-
-    if (budget == null) {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "No budget found for the selected month."
-        );
-
-        return;
-    }
-
-    int choice = JOptionPane.showConfirmDialog(
-            this,
-            "Delete this budget?",
-            "Confirm Delete",
-            JOptionPane.YES_NO_OPTION
-    );
-
-    if (choice == JOptionPane.YES_OPTION) {
-
-        if (financeService.deleteBudget(budget.getBudgetId())) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Budget deleted successfully."
-            );
-
-            clearFields();
-
-            loadCurrentBudget();
-
-        } else {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Failed to delete budget."
-            );
+            }
 
         }
 
     }
-
-}
-
 
 }

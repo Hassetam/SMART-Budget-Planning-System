@@ -1,6 +1,6 @@
 package service;
 
 public record BudgetWarning(
-        String level,
-        String message
-) {}
+                String level,
+                String message) {
+}

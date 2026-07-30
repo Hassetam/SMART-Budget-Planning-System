@@ -165,16 +165,16 @@ public class SmartAdvisorPanel extends JPanel {
         checkSavingsSuggestionButton.addActionListener(e -> handleSavingsSuggestion());
     }
 
-    //=========================================================
+    // =========================================================
     // Daily Budget Adjustment
-    //=========================================================
+    // =========================================================
     private void handleDailyBudgetCheck() {
 
         DailyBudgetResult result = smartAdvisorService.analyzeDailyBudget(currentUser.getUserId());
 
         if (result.needsAllocationDecision()) {
 
-            String[] options = {"Monthly Expenses", "Savings", "Occasion Fund"};
+            String[] options = { "Monthly Expenses", "Savings", "Occasion Fund" };
 
             int choice = JOptionPane.showOptionDialog(
                     this,
@@ -215,13 +215,12 @@ public class SmartAdvisorPanel extends JPanel {
         loadAdvisorData();
     }
 
-    //=========================================================
+    // =========================================================
     // Occasion goal shortfall check
-    //=========================================================
+    // =========================================================
     private void handleOccasionGoalsCheck() {
 
-        List<OccasionShortfallResult> results =
-                smartAdvisorService.checkOccasionGoals(currentUser.getUserId());
+        List<OccasionShortfallResult> results = smartAdvisorService.checkOccasionGoals(currentUser.getUserId());
 
         if (results.isEmpty()) {
 
@@ -233,7 +232,7 @@ public class SmartAdvisorPanel extends JPanel {
 
             if (result.needsFundingDecision()) {
 
-                String[] options = {"Monthly Budget", "Regular Savings"};
+                String[] options = { "Monthly Budget", "Regular Savings" };
 
                 int choice = JOptionPane.showOptionDialog(
                         this,
@@ -276,13 +275,12 @@ public class SmartAdvisorPanel extends JPanel {
         loadAdvisorData();
     }
 
-    //=========================================================
+    // =========================================================
     // Savings Suggestions (end of month)
-    //=========================================================
+    // =========================================================
     private void handleSavingsSuggestion() {
 
-        SavingsSuggestion suggestion =
-                smartAdvisorService.suggestEndOfMonthSavings(currentUser.getUserId());
+        SavingsSuggestion suggestion = smartAdvisorService.suggestEndOfMonthSavings(currentUser.getUserId());
 
         if (suggestion == null) {
 
@@ -290,7 +288,7 @@ public class SmartAdvisorPanel extends JPanel {
             return;
         }
 
-        String[] options = {"Savings", "Occasion Fund"};
+        String[] options = { "Savings", "Occasion Fund" };
 
         int choice = JOptionPane.showOptionDialog(
                 this,
@@ -321,10 +319,10 @@ public class SmartAdvisorPanel extends JPanel {
         loadAdvisorData();
     }
 
-    //=========================================================
+    // =========================================================
     // Lets the user pick which goal to fund, filtered to the
     // right goal type for the chosen destination.
-    //=========================================================
+    // =========================================================
     private Integer promptForGoal(String destination) {
 
         List<Goal> activeGoals = smartAdvisorService.getActiveGoals(currentUser.getUserId());

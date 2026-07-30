@@ -135,4 +135,107 @@ public class AuthenticationService {
         return password != null && password.length() >= 6;
     }
 
+   public boolean deleteAccount(int userId) {
+
+    String deleteBudgets = """
+            DELETE FROM Budgets
+            WHERE USERID = ?
+            """;
+
+    String deleteExpenses = """
+            DELETE FROM Expenses
+            WHERE USERID = ?
+            """;
+
+    String deleteIncome = """
+            DELETE FROM Income
+            WHERE USERID = ?
+            """;
+
+    String deleteGoals = """
+            DELETE FROM Goals
+            WHERE USERID = ?
+            """;
+
+    String deleteUser = """
+            DELETE FROM Users
+            WHERE USERID = ?
+            """;
+
+    try (Connection connection = DatabaseManager.getConnection()) {
+
+        connection.setAutoCommit(false);
+
+        PreparedStatement statement;
+
+        statement = connection.prepareStatement(deleteBudgets);
+        statement.setInt(1, userId);
+        statement.executeUpdate();
+
+        statement = connection.prepareStatement(deleteExpenses);
+        statement.setInt(1, userId);
+        statement.executeUpdate();
+
+        statement = connection.prepareStatement(deleteIncome);
+        statement.setInt(1, userId);
+        statement.executeUpdate();
+
+        statement = connection.prepareStatement(deleteGoals);
+        statement.setInt(1, userId);
+        statement.executeUpdate();
+
+        statement = connection.prepareStatement(deleteUser);
+        statement.setInt(1, userId);
+
+        int rowsAffected = statement.executeUpdate();
+
+        connection.commit();
+
+        return rowsAffected > 0;
+
+    } catch (SQLException e) {
+
+        e.printStackTrace();
+
+        return false;
+    }
+}
+
+public boolean changePassword(int userId, String newPassword) {
+
+    if (newPassword == null || newPassword.length() < 6) {
+
+        return false;
+    }
+
+
+    String sql = """
+            UPDATE Users
+            SET Password = ?
+            WHERE UserID = ?
+            """;
+
+
+    try (Connection connection = DatabaseManager.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+
+
+        statement.setString(1, newPassword);
+        statement.setInt(2, userId);
+
+
+        int rowsAffected = statement.executeUpdate();
+
+
+        return rowsAffected > 0;
+
+
+    } catch (SQLException e) {
+
+        e.printStackTrace();
+        return false;
+
+    }
+
+}
 }

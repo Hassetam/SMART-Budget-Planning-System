@@ -40,6 +40,7 @@ public class DashboardPanel extends JPanel {
     // Buttons
     private JButton addExpenseButton;
     private JButton addIncomeButton;
+    private JButton refreshButton;
 
     public DashboardPanel(User currentUser,MainFrame mainFrame) {
 
@@ -80,7 +81,12 @@ public class DashboardPanel extends JPanel {
         remainingLabel.setFont(infoFont);
         savingsLabel.setFont(infoFont);
 
-        recentExpenseArea = new JTextArea(8,30);
+        recentExpenseArea = new JTextArea(10,40);
+                recentExpenseArea.setLineWrap(true);
+recentExpenseArea.setWrapStyleWord(true);
+recentExpenseArea.setBackground(UIConstants.PANEL_COLOR);
+
+
         recentExpenseArea.setEditable(false);
         recentExpenseArea.setFont(UIConstants.NORMAL_FONT);
 
@@ -96,10 +102,18 @@ public class DashboardPanel extends JPanel {
         addIncomeButton.setBackground(UIConstants.BUTTON_COLOR);
         addIncomeButton.setForeground(Color.WHITE);
 
-        summaryPanel = new JPanel(new GridLayout(5,1,10,10));
-        summaryPanel.setBackground(UIConstants.PANEL_COLOR);
+        refreshButton = new JButton("Refresh");
 
-        buttonPanel = new JPanel();
+refreshButton.setFont(UIConstants.BUTTON_FONT);
+
+refreshButton.setBackground(UIConstants.BUTTON_COLOR);
+refreshButton.setForeground(Color.WHITE);
+
+summaryPanel = new JPanel(new GridLayout(5,1,5,5));
+summaryPanel.setBorder(
+        BorderFactory.createEmptyBorder(10,10,10,10));        summaryPanel.setBackground(UIConstants.PANEL_COLOR);
+
+        buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,20,50));
         buttonPanel.setBackground(UIConstants.BACKGROUND_COLOR);
 
     }
@@ -131,15 +145,21 @@ public class DashboardPanel extends JPanel {
 
         buttonPanel.add(addExpenseButton);
         buttonPanel.add(addIncomeButton);
+        buttonPanel.add(refreshButton);
+JPanel centerPanel = new JPanel();
+centerPanel.setLayout(new BorderLayout(20,20));
+centerPanel.setBackground(UIConstants.BACKGROUND_COLOR);
 
-        add(northPanel,BorderLayout.NORTH);
-        add(summaryPanel,BorderLayout.CENTER);
-        add(expensePanel,BorderLayout.EAST);
-        add(buttonPanel,BorderLayout.SOUTH);
+centerPanel.add(summaryPanel, BorderLayout.NORTH);
+centerPanel.add(expensePanel, BorderLayout.CENTER);
+
+add(northPanel, BorderLayout.NORTH);
+add(centerPanel, BorderLayout.CENTER);
+add(buttonPanel, BorderLayout.SOUTH);
 
     }
 
-    private void loadDashboardData() {
+    public void loadDashboardData() {
 
         int month = java.time.LocalDate.now().getMonthValue();
         int year = java.time.LocalDate.now().getYear();
@@ -187,10 +207,54 @@ public class DashboardPanel extends JPanel {
         savingsLabel.setText(
                 String.format("Savings Rate : %.2f%%", savings));
 
-        recentExpenseArea.setText(
-                "Recent expenses will appear here.");
+       loadRecentExpenses();
     }
 
+    private void loadRecentExpenses() {
+
+    recentExpenseArea.setText("");
+
+    var expenses = financeService.getExpenses(currentUser.getUserId());
+
+    if(expenses.isEmpty()){
+
+        recentExpenseArea.setText("No expenses found.");
+
+        return;
+
+    }
+
+    int count = 0;
+
+    for(var expense : expenses){
+
+        recentExpenseArea.append(
+
+                expense.getDateSpent()
+
+                + "   |   "
+
+                + expense.getCategory()
+
+                + "   |   ETB "
+
+                + expense.getAmount()
+
+                + "\n"
+
+        );
+
+        count++;
+
+        if(count == 5){
+
+            break;
+
+        }
+
+    }
+
+}
     private void registerListeners() {
 
        addExpenseButton.addActionListener(e ->
@@ -198,6 +262,12 @@ public class DashboardPanel extends JPanel {
     
     addIncomeButton.addActionListener(e ->
         mainFrame.showPanel("Income"));
+
+        refreshButton.addActionListener(e -> {
+    loadDashboardData();
+    loadRecentExpenses();
+
+});
     }
 
 }

@@ -15,34 +15,25 @@ import util.UIConstants;
 
 public class GoalPanel extends JPanel {
 
-        // ==========================================================
-        // USER AND SERVICE
-        // ==========================================================
-        private User currentUser;
+    // ==========================================================
+    // USER AND SERVICE
+    // ==========================================================
+    private User currentUser;
 
-        private GoalService goalService;
+    private GoalService goalService;
 
-        // ==========================================================
-        // INPUT COMPONENTS
-        // ==========================================================
-        private JTextField goalNameField;
-        private JTextField occasionTypeField;
-        private JTextField targetAmountField;
-        private JTextField savedAmountField;
-        private JTextField deadlineField;
+    // ==========================================================
+    // INPUT COMPONENTS
+    // ==========================================================
+    private JTextField goalNameField;
+    private JTextField occasionTypeField;
+    private JTextField targetAmountField;
+    private JTextField savedAmountField;
+    private JTextField deadlineField;
 
-        private JRadioButton generalRadio;
-        private JRadioButton occasionRadio;
+    private JRadioButton generalRadio;
+    private JRadioButton occasionRadio;
 
-        // ==========================================================
-        // BUTTONS
-        // ==========================================================
-        private JButton addGoalButton;
-        private JButton refreshButton;
-        private JButton updateButton;
-        private JButton addSavingsButton;
-        private JButton completeButton;
-        private JButton deleteButton;
     // ==========================================================
     // BUTTONS
     // ==========================================================
@@ -54,34 +45,31 @@ public class GoalPanel extends JPanel {
     private JButton deleteButton;
     private JButton restoreButton;
 
-        // ==========================================================
-        // TABLE
-        // ==========================================================
-        private JTable goalTable;
+    // ==========================================================
+    // TABLE
+    // ==========================================================
+    private JTable goalTable;
 
-        private DefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
 
-        // Stores selected goal ID
-        private int selectedGoalId = -1;
+    // Stores selected goal ID
+    private int selectedGoalId = -1;
 
-        // ==========================================================
-        // CONSTRUCTOR
-        // ==========================================================
-        public GoalPanel(User currentUser) {
+    // ==========================================================
+    // CONSTRUCTOR
+    // ==========================================================
+    public GoalPanel(User currentUser) {
 
-                this.currentUser = currentUser;
+        this.currentUser = currentUser;
 
-                goalService = new GoalService();
+        goalService = new GoalService();
 
-                initializeComponents();
+        initializeComponents();
 
-                layoutComponents();
+        layoutComponents();
 
-                registerListeners();
+        registerListeners();
 
-<<<<<<< HEAD
-                loadGoals();
-=======
         loadGoals();
 
     }
@@ -162,7 +150,6 @@ public class GoalPanel extends JPanel {
         );
 
         deleteButton.setForeground(Color.WHITE);
-
         // Table
         String[] columns = {
             "ID",
@@ -422,695 +409,386 @@ public class GoalPanel extends JPanel {
                         goal.isCompleted()
                     }
             );
->>>>>>> f42cd36dbc48937989eb969ec470bd569c1d189b
 
         }
 
-        // ==========================================================
-        // INITIALIZE COMPONENTS
-        // ==========================================================
-        private void initializeComponents() {
+    }
 
-                setLayout(new BorderLayout(20, 20));
+    // ==========================================================
+    // LISTENERS
+    // ==========================================================
+    private void registerListeners() {
 
-                setBackground(
-                                UIConstants.BACKGROUND_COLOR);
+        generalRadio.addActionListener(e -> {
 
-                // Text fields
-                goalNameField = new JTextField();
+            occasionTypeField.setText("");
 
-                occasionTypeField = new JTextField();
+            occasionTypeField.setEnabled(false);
 
-                targetAmountField = new JTextField();
+        });
 
-                savedAmountField = new JTextField();
+        occasionRadio.addActionListener(e -> {
 
-                deadlineField = new JTextField();
+            occasionTypeField.setEnabled(true);
 
-                // Radio buttons
-                generalRadio = new JRadioButton("General Goal");
+        });
 
-                occasionRadio = new JRadioButton("Occasion Goal");
+        addGoalButton.addActionListener(e -> addGoal());
 
-                ButtonGroup group = new ButtonGroup();
+        refreshButton.addActionListener(e -> loadGoals());
 
-                group.add(generalRadio);
+        updateButton.addActionListener(e -> updateGoal());
 
-                group.add(occasionRadio);
+        addSavingsButton.addActionListener(e -> addSavings());
 
-                generalRadio.setSelected(true);
+        completeButton.addActionListener(e -> completeGoal());
 
-                occasionTypeField.setEnabled(false);
+        deleteButton.addActionListener(e -> deleteGoal());
 
-                // Buttons
-                addGoalButton = new JButton("Add Goal");
+        goalTable.getSelectionModel()
+                .addListSelectionListener(e -> {
 
-                refreshButton = new JButton("Refresh");
+                    int row
+                            = goalTable.getSelectedRow();
 
-                updateButton = new JButton("Update");
+                    if (row >= 0) {
 
-                addSavingsButton = new JButton("Add Savings");
+                        selectedGoalId
+                                = Integer.parseInt(
+                                        tableModel.getValueAt(
+                                                row,
+                                                0
+                                        ).toString()
+                                );
 
-                completeButton = new JButton("Complete");
+                        fillFieldsFromTable(row);
 
-                deleteButton = new JButton("Delete");
-
-                addGoalButton.setFont(UIConstants.BUTTON_FONT);
-
-                refreshButton.setFont(UIConstants.BUTTON_FONT);
-
-                updateButton.setFont(UIConstants.BUTTON_FONT);
-
-                addSavingsButton.setFont(UIConstants.BUTTON_FONT);
-
-                completeButton.setFont(UIConstants.BUTTON_FONT);
-
-                deleteButton.setFont(UIConstants.BUTTON_FONT);
-
-                deleteButton.setBackground(
-                                UIConstants.DELETE_BUTTON_COLOR);
-
-                deleteButton.setForeground(Color.WHITE);
-
-                // Table
-                String[] columns = {
-                                "ID",
-                                "Goal Name",
-                                "Type",
-                                "Occasion",
-                                "Target",
-                                "Saved",
-                                "Deadline",
-                                "Completed"
-
-                };
-
-                tableModel = new DefaultTableModel(columns, 0) {
-
-                        @Override
-                        public boolean isCellEditable(
-                                        int row,
-                                        int column) {
-
-                                return false;
-                        }
-
-                };
-
-                goalTable = new JTable(tableModel);
-
-                goalTable.setSelectionMode(
-                                ListSelectionModel.SINGLE_SELECTION);
-
-                goalTable.setFont(
-                                UIConstants.NORMAL_FONT);
-
-                goalTable.getTableHeader()
-                                .setFont(
-                                                UIConstants.BUTTON_FONT);
-
-        }
-
-        // ==========================================================
-        // LAYOUT
-        // ==========================================================
-        private void layoutComponents() {
-
-                JPanel titlePanel = new JPanel();
-
-                titlePanel.setBackground(
-                                UIConstants.BACKGROUND_COLOR);
-
-                JLabel title = new JLabel("GOALS");
-
-                title.setFont(
-                                UIConstants.TITLE_FONT);
-
-                titlePanel.add(title);
-
-                add(
-                                titlePanel,
-                                BorderLayout.NORTH);
-
-                JPanel formPanel = new JPanel(
-                                new GridLayout(8, 2, 10, 10));
-
-                formPanel.setBackground(
-                                UIConstants.PANEL_COLOR);
-
-                formPanel.setBorder(
-                                BorderFactory.createTitledBorder(
-                                                "Create Goal"));
-
-                formPanel.add(
-                                new JLabel("Goal Name"));
-
-                formPanel.add(
-                                goalNameField);
-
-                formPanel.add(
-                                new JLabel("Goal Type"));
-
-                JPanel typePanel = new JPanel(
-                                new FlowLayout(
-                                                FlowLayout.LEFT));
-
-                typePanel.add(generalRadio);
-
-                typePanel.add(occasionRadio);
-
-                formPanel.add(typePanel);
-
-                formPanel.add(
-                                new JLabel("Occasion Type"));
-
-                formPanel.add(
-                                occasionTypeField);
-
-                formPanel.add(
-                                new JLabel("Target Amount"));
-
-                formPanel.add(
-                                targetAmountField);
-
-                formPanel.add(
-                                new JLabel("Saved Amount"));
-
-                formPanel.add(
-                                savedAmountField);
-
-                formPanel.add(
-                                new JLabel("Deadline YYYY-MM-DD"));
-
-                formPanel.add(
-                                deadlineField);
-
-                formPanel.add(
-                                new JLabel());
-
-                formPanel.add(
-                                addGoalButton);
-
-                JPanel centerPanel = new JPanel(
-                                new BorderLayout(10, 10));
-
-                centerPanel.setBackground(
-                                UIConstants.BACKGROUND_COLOR);
-
-                centerPanel.add(
-                                formPanel,
-                                BorderLayout.NORTH);
-
-                JPanel tablePanel = new JPanel(
-                                new BorderLayout());
-
-                tablePanel.setBorder(
-                                BorderFactory.createTitledBorder(
-                                                "Your Goals"));
-
-                tablePanel.add(
-                                new JScrollPane(goalTable));
-
-                centerPanel.add(
-                                tablePanel,
-                                BorderLayout.CENTER);
-
-                add(
-                                centerPanel,
-                                BorderLayout.CENTER);
-
-                JPanel buttonPanel = new JPanel();
-
-                buttonPanel.setBackground(
-                                UIConstants.BACKGROUND_COLOR);
-
-                buttonPanel.add(refreshButton);
-
-                buttonPanel.add(updateButton);
-
-                buttonPanel.add(addSavingsButton);
-
-                buttonPanel.add(completeButton);
-
-                buttonPanel.add(deleteButton);
-
-                add(
-                                buttonPanel,
-                                BorderLayout.SOUTH);
-
-        }
-
-        // ==========================================================
-        // LOAD TABLE DATA
-        // ==========================================================
-        private void loadGoals() {
-
-                tableModel.setRowCount(0);
-
-                List<Goal> goals = goalService.getGoalsByUser(
-                                currentUser.getUserId());
-
-                for (Goal goal : goals) {
-
-                        String occasion = "";
-
-                        if (goal instanceof OccasionGoal og) {
-
-                                occasion = og.getOccasionType();
-
-                        }
-
-                        tableModel.addRow(
-                                        new Object[] {
-                                                        goal.getGoalId(),
-                                                        goal.getGoalName(),
-                                                        goal.getGoalType(),
-                                                        occasion,
-                                                        goal.getTargetAmount(),
-                                                        goal.getSavedAmount(),
-                                                        goal.getDeadline(),
-                                                        goal.isCompleted()
-                                        });
-
-                }
-
-        }
-
-        // ==========================================================
-        // LISTENERS
-        // ==========================================================
-        private void registerListeners() {
-
-                generalRadio.addActionListener(e -> {
-
-                        occasionTypeField.setText("");
-
-                        occasionTypeField.setEnabled(false);
+                    }
 
                 });
 
-<<<<<<< HEAD
-                occasionRadio.addActionListener(e -> {
-=======
         //Newly added (For restoring deleted goals)
         restoreButton.addActionListener(e -> handleRestore());
 
     }
->>>>>>> f42cd36dbc48937989eb969ec470bd569c1d189b
 
-                        occasionTypeField.setEnabled(true);
+    // ==========================================================
+    // ADD GOAL
+    // ==========================================================
+    private void addGoal() {
 
-                });
+        try {
 
-                addGoalButton.addActionListener(e -> addGoal());
+            String name
+                    = goalNameField.getText().trim();
 
-                refreshButton.addActionListener(e -> loadGoals());
+            double target
+                    = Double.parseDouble(
+                            targetAmountField.getText()
+                    );
 
-                updateButton.addActionListener(e -> updateGoal());
+            double saved
+                    = Double.parseDouble(
+                            savedAmountField.getText()
+                    );
 
-                addSavingsButton.addActionListener(e -> addSavings());
+            LocalDate deadline
+                    = LocalDate.parse(
+                            deadlineField.getText()
+                    );
 
-                completeButton.addActionListener(e -> completeGoal());
+                    Goal goal;
 
-                deleteButton.addActionListener(e -> deleteGoal());
+            if (generalRadio.isSelected()) {
 
-                goalTable.getSelectionModel()
-                                .addListSelectionListener(e -> {
+                goal
+                        = new GeneralGoal(
+                                currentUser.getUserId(),
+                                name,
+                                "General",
+                                target,
+                                saved,
+                                deadline,
+                                false
+                        );
 
-                                        int row = goalTable.getSelectedRow();
+            } else {
 
-                                        if (row >= 0) {
+                String occasion
+                        = occasionTypeField
+                                .getText()
+                                .trim();
 
-                                                selectedGoalId = Integer.parseInt(
-                                                                tableModel.getValueAt(
-                                                                                row,
-                                                                                0).toString());
+                if (occasion.isEmpty()) {
 
-                                                fillFieldsFromTable(row);
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Enter occasion type."
+                    );
 
-                                        }
+                    return;
+                }
 
-                                });
+                goal
+                        = new OccasionGoal(
+                                currentUser.getUserId(),
+                                name,
+                                "Occasion",
+                                target,
+                                saved,
+                                deadline,
+                                false,
+                                occasion
+                        );
+
+            }
+
+            if (goalService.addGoal(goal)) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Goal added successfully."
+                );
+
+                clearFields();
+
+                loadGoals();
+
+            } else {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Failed to add goal."
+                );
+
+            }
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Amount must be numeric."
+            );
+
+        } catch (DateTimeParseException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Date format must be YYYY-MM-DD."
+            );
 
         }
 
-        // ==========================================================
-        // ADD GOAL
-        // ==========================================================
-        private void addGoal() {
+    }
 
-                try {
+    // ==========================================================
+    // UPDATE GOAL
+    // ==========================================================
+    private void updateGoal() {
 
-                        String name = goalNameField.getText().trim();
+        if (selectedGoalId == -1) {
 
-                        double target = Double.parseDouble(
-                                        targetAmountField.getText());
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Select a goal first."
+            );
 
-                        double saved = Double.parseDouble(
-                                        savedAmountField.getText());
-
-                        LocalDate deadline = LocalDate.parse(
-                                        deadlineField.getText());
-
-                        Goal goal;
-
-                        if (generalRadio.isSelected()) {
-
-                                goal = new GeneralGoal(
-                                                currentUser.getUserId(),
-                                                name,
-                                                "General",
-                                                target,
-                                                saved,
-                                                deadline,
-                                                false);
-
-                        } else {
-
-                                String occasion = occasionTypeField
-                                                .getText()
-                                                .trim();
-
-                                if (occasion.isEmpty()) {
-
-                                        JOptionPane.showMessageDialog(
-                                                        this,
-                                                        "Enter occasion type.");
-
-                                        return;
-                                }
-
-                                goal = new OccasionGoal(
-                                                currentUser.getUserId(),
-                                                name,
-                                                "Occasion",
-                                                target,
-                                                saved,
-                                                deadline,
-                                                false,
-                                                occasion);
-
-                        }
-
-                        if (goalService.addGoal(goal)) {
-
-                                JOptionPane.showMessageDialog(
-                                                this,
-                                                "Goal added successfully.");
-
-                                clearFields();
-
-                                loadGoals();
-
-                        } else {
-
-                                JOptionPane.showMessageDialog(
-                                                this,
-                                                "Failed to add goal.");
-
-                        }
-
-                } catch (NumberFormatException e) {
-
-                        JOptionPane.showMessageDialog(
-                                        this,
-                                        "Amount must be numeric.");
-
-                } catch (DateTimeParseException e) {
-
-                        JOptionPane.showMessageDialog(
-                                        this,
-                                        "Date format must be YYYY-MM-DD.");
-
-                }
+            return;
 
         }
 
-        // ==========================================================
-        // UPDATE GOAL
-        // ==========================================================
-        private void updateGoal() {
+        Goal goal
+                = goalService.getGoalById(
+                        selectedGoalId
+                );
 
-                if (selectedGoalId == -1) {
+        if (goal == null) {
 
-                        JOptionPane.showMessageDialog(
-                                        this,
-                                        "Select a goal first.");
-
-                        return;
-
-                }
-
-                Goal goal = goalService.getGoalById(
-                                selectedGoalId);
-
-                if (goal == null) {
-
-                        return;
-
-                }
-
-                try {
-
-                        goal.setGoalName(
-                                        goalNameField.getText());
-
-                        goal.setTargetAmount(
-                                        Double.parseDouble(
-                                                        targetAmountField.getText()));
-
-                        goal.setSavedAmount(
-                                        Double.parseDouble(
-                                                        savedAmountField.getText()));
-
-                        goal.setDeadline(
-                                        LocalDate.parse(
-                                                        deadlineField.getText()));
-
-                        if (goal instanceof OccasionGoal og) {
-
-                                og.setOccasionType(
-                                                occasionTypeField.getText());
-
-                        }
-
-                        if (goalService.updateGoal(goal)) {
-
-                                JOptionPane.showMessageDialog(
-                                                this,
-                                                "Goal updated.");
-
-                                loadGoals();
-
-                        }
-
-                } catch (Exception e) {
-
-                        JOptionPane.showMessageDialog(
-                                        this,
-                                        "Invalid data.");
-
-                }
+            return;
 
         }
 
-        // ==========================================================
-        // ADD SAVINGS
-        // ==========================================================
-        private void addSavings() {
+        try {
 
-                if (selectedGoalId == -1) {
+            goal.setGoalName(
+                    goalNameField.getText()
+            );
 
-                        JOptionPane.showMessageDialog(
-                                        this,
-                                        "Select a goal.");
+            goal.setTargetAmount(
+                    Double.parseDouble(
+                            targetAmountField.getText()
+                    )
+            );
 
-                        return;
+            goal.setSavedAmount(
+                    Double.parseDouble(
+                            savedAmountField.getText()
+                    )
+            );
 
-                }
+            goal.setDeadline(
+                    LocalDate.parse(
+                            deadlineField.getText()
+                    )
+            );
 
-                String amount = JOptionPane.showInputDialog(
-                                this,
-                                "Enter new saved amount:");
+            if (goal instanceof OccasionGoal og) {
 
-                try {
+                og.setOccasionType(
+                        occasionTypeField.getText()
+                );
 
-                        double value = Double.parseDouble(amount);
+            }
 
-                        if (goalService.updateSavedAmount(
-                                        selectedGoalId,
-                                        value)) {
+            if (goalService.updateGoal(goal)) {
 
-                                JOptionPane.showMessageDialog(
-                                                this,
-                                                "Savings updated.");
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Goal updated."
+                );
 
-                                loadGoals();
+                loadGoals();
 
-                        }
+            }
 
-                } catch (Exception e) {
+        } catch (Exception e) {
 
-                        JOptionPane.showMessageDialog(
-                                        this,
-                                        "Invalid amount.");
-
-                }
-
-        }
-
-        // ==========================================================
-        // COMPLETE GOAL
-        // ==========================================================
-        private void completeGoal() {
-
-                if (selectedGoalId == -1) {
-
-                        JOptionPane.showMessageDialog(
-                                        this,
-                                        "Select a goal.");
-
-                        return;
-
-                }
-
-                if (goalService.setGoalCompleted(
-                                selectedGoalId,
-                                true)) {
-
-                        JOptionPane.showMessageDialog(
-                                        this,
-                                        "Goal completed!");
-
-                        loadGoals();
-
-                }
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Invalid data."
+            );
 
         }
 
-        // ==========================================================
-        // DELETE GOAL
-        // ==========================================================
-        private void deleteGoal() {
+    }
 
-                if (selectedGoalId == -1) {
+    // ==========================================================
+    // ADD SAVINGS
+    // ==========================================================
+    private void addSavings() {
+        if (selectedGoalId == -1) {
 
-                        JOptionPane.showMessageDialog(
-                                        this,
-                                        "Select a goal.");
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Select a goal."
+            );
 
-                        return;
-
-                }
-
-                int choice = JOptionPane.showConfirmDialog(
-                                this,
-                                "Delete this goal?");
-
-                if (choice == JOptionPane.YES_OPTION) {
-
-                        if (goalService.deleteGoal(
-                                        selectedGoalId)) {
-
-                                JOptionPane.showMessageDialog(
-                                                this,
-                                                "Goal deleted.");
-
-                                selectedGoalId = -1;
-
-                                clearFields();
-
-                                loadGoals();
-
-                        }
-
-                }
+            return;
 
         }
 
-        // ==========================================================
-        // RESTORE (READY FOR SETTINGS)
-        // ==========================================================
-        public void restoreGoal(int goalId) {
+        String amount
+                = JOptionPane.showInputDialog(
+                        this,
+                        "Enter new saved amount:"
+                );
 
-                if (goalService.restoreGoal(goalId)) {
+        try {
 
-                        JOptionPane.showMessageDialog(
-                                        this,
-                                        "Goal restored.");
+            double value
+                    = Double.parseDouble(amount);
 
-                        loadGoals();
+            if (goalService.updateSavedAmount(
+                    selectedGoalId,
+                    value
+            )) {
 
-                }
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Savings updated."
+                );
 
-        }
+                loadGoals();
 
-        // ==========================================================
-        // HELPERS
-        // ==========================================================
-        private void fillFieldsFromTable(int row) {
+            }
 
-                goalNameField.setText(
-                                tableModel.getValueAt(row, 1)
-                                                .toString());
+        } catch (Exception e) {
 
-                String type = tableModel.getValueAt(row, 2)
-                                .toString();
-
-                if (type.equalsIgnoreCase("General")) {
-
-                        generalRadio.setSelected(true);
-
-                        occasionTypeField.setEnabled(false);
-
-                } else {
-
-                        occasionRadio.setSelected(true);
-
-                        occasionTypeField.setEnabled(true);
-
-                        occasionTypeField.setText(
-                                        tableModel.getValueAt(row, 3)
-                                                        .toString());
-
-                }
-
-                targetAmountField.setText(
-                                tableModel.getValueAt(row, 4)
-                                                .toString());
-
-                savedAmountField.setText(
-                                tableModel.getValueAt(row, 5)
-                                                .toString());
-
-                deadlineField.setText(
-                                tableModel.getValueAt(row, 6)
-                                                .toString());
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Invalid amount."
+            );
 
         }
 
-        private void clearFields() {
+    }
 
-                goalNameField.setText("");
+    // ==========================================================
+    // COMPLETE GOAL
+    // ==========================================================
+    private void completeGoal() {
 
-                occasionTypeField.setText("");
+        if (selectedGoalId == -1) {
 
-                targetAmountField.setText("");
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Select a goal."
+            );
 
-                savedAmountField.setText("");
+            return;
 
-                deadlineField.setText("");
+        }
 
-                generalRadio.setSelected(true);
+        if (goalService.setGoalCompleted(
+                selectedGoalId,
+                true
+        )) {
 
-                occasionTypeField.setEnabled(false);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Goal completed!"
+            );
+
+            loadGoals();
+
+        }
+
+    }
+
+    // ==========================================================
+    // DELETE GOAL
+    // ==========================================================
+    private void deleteGoal() {
+
+        if (selectedGoalId == -1) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Select a goal."
+            );
+
+            return;
+
+        }
+
+        int choice
+                = JOptionPane.showConfirmDialog(
+                        this,
+                        "Delete this goal?"
+                );
+
+        if (choice
+                == JOptionPane.YES_OPTION) {
+
+            if (goalService.deleteGoal(
+                    selectedGoalId
+            )) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Goal deleted."
+                );
 
                 selectedGoalId = -1;
 
+                clearFields();
+
+                loadGoals();
+
+            }
+
         }
 
-<<<<<<< HEAD
-=======
     }
 
     // ==========================================================
@@ -1167,8 +845,7 @@ public class GoalPanel extends JPanel {
         }
 
         for (Goal goal : deletedGoals) {
-
-            if (goal.getGoalName().equals(chosenName)) {
+                if (goal.getGoalName().equals(chosenName)) {
 
                 restoreGoal(goal.getGoalId()); //Triggers the reload automatically
 
@@ -1247,5 +924,4 @@ public class GoalPanel extends JPanel {
 
     }
 
->>>>>>> f42cd36dbc48937989eb969ec470bd569c1d189b
 }

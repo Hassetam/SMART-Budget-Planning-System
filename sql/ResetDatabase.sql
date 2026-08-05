@@ -87,13 +87,7 @@ GO
 =========================================================*/
 
 INSERT INTO Income
-    (
-    USERID,
-    Amount,
-    Expected,
-    DateReceived,
-    Description
-    )
+    
 VALUES
     (
         1,
@@ -124,13 +118,6 @@ GO
 =========================================================*/
 
 INSERT INTO Expenses
-    (
-    USERID,
-    Amount,
-    Category,
-    DateSpent,
-    Description
-    )
 VALUES
     (
         1,
